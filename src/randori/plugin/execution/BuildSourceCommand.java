@@ -69,28 +69,18 @@ public class BuildSourceCommand
 
                 if (code == 0)
                 {
-                    ApplicationManager.getApplication().invokeLater(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ProblemsToolWindow.refresh(null);
-                        }
-                    });
+                    // for now the chance we have SWC warnings
+                    problems.clear();
                 }
-                else
-                {
-                    ApplicationManager.getApplication().invokeLater(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ProblemsToolWindow.refresh(problems);
-                        }
-                    });
 
-                    NotificationUtils.sendRandoriInformation("Error", "error in project '" + toErrorCode(code) + "'");
-                }
+                ApplicationManager.getApplication().invokeLater(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        ProblemsToolWindow.refresh(problems);
+                    }
+                });
             }
         });
     }
@@ -128,7 +118,16 @@ public class BuildSourceCommand
                         }
                     });
 
-                    NotificationUtils.sendRandoriInformation("Error", "error in project '" + toErrorCode(code) + "'");
+                    if (ProblemsToolWindow.hasErrors())
+                    {
+                        NotificationUtils.sendRandoriInformation("Error", "Error in project, Check Problems view for more information '" + toErrorCode(code) + "'");
+                    }
+                    else
+                    {
+                        // XXX This is temp until I get the ProblemQuery yanked out of the compiler
+                        // this would hit here if there are still Warnings but the build passed
+                        NotificationUtils.sendRandoriInformation("Success", "Successfully compiled and built project with warnings '" + name + "'");
+                    }
                 }
 
                 copySdkLibraries(project);

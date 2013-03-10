@@ -62,6 +62,8 @@ public class ProblemsToolWindow
 
     private JPanel jPanel;
 
+    private List<ICompilerProblem> problems;
+
     public ProblemsToolWindow(ToolWindow window)
     {
         instance = this;
@@ -132,7 +134,7 @@ public class ProblemsToolWindow
             if (!(p instanceof NoDefinitionForSWCDependencyProblem))
                 result.add(p);
         }
-
+        this.problems = result;
         AbstractTableModel model = new ProblemsTableModel(result);
         table.setModel(model);
     }
@@ -162,6 +164,13 @@ public class ProblemsToolWindow
         instance.reset(problems);
     }
 
+    public static boolean hasErrors()
+    {
+        if (instance == null || instance.problems == null)
+            return false;
+        return instance.problems.size() > 0;
+    }
+    
     static class IconRenderer extends DefaultTableCellRenderer
     {
         public IconRenderer()

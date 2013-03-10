@@ -20,9 +20,10 @@
 package randori.plugin.components;
 
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import org.jetbrains.annotations.NotNull;
-import randori.plugin.builder.FileChangeBuilder;
+import randori.plugin.builder.FileChangeListener;
 import randori.plugin.execution.BuildSourceCommand;
 import randori.plugin.execution.CompilerArguments;
 
@@ -35,6 +36,8 @@ public class RandoriApplicationComponent implements ApplicationComponent
     private CompilerArguments compilerArguments;
 
     private BuildSourceCommand buildSourceCommand;
+
+    private VirtualFileListener fileChangeListener;
 
     public BuildSourceCommand getBuildSourceCommand()
     {
@@ -49,8 +52,8 @@ public class RandoriApplicationComponent implements ApplicationComponent
     @Override
     public void initComponent()
     {
-        VirtualFileManager.getInstance().addVirtualFileListener(new FileChangeBuilder());
-        //startupApplication();
+        fileChangeListener = new FileChangeListener();
+        VirtualFileManager.getInstance().addVirtualFileListener(fileChangeListener);
 
         compilerArguments = new CompilerArguments();
         buildSourceCommand = new BuildSourceCommand();
@@ -59,6 +62,7 @@ public class RandoriApplicationComponent implements ApplicationComponent
     @Override
     public void disposeComponent()
     {
+        VirtualFileManager.getInstance().removeVirtualFileListener(fileChangeListener);
     }
 
     @NotNull

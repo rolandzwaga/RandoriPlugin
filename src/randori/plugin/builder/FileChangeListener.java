@@ -26,7 +26,7 @@ import randori.plugin.utils.ProjectUtils;
 /**
  * @author Michael Schmalle
  */
-public class FileChangeBuilder implements VirtualFileListener
+public class FileChangeListener implements VirtualFileListener
 {
     @Override
     public void propertyChanged(VirtualFilePropertyEvent event)
