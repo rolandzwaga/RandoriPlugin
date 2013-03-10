@@ -1,0 +1,71 @@
+<idea-plugin version="2">
+    <name>Randori Compiler</name>
+    <description>Randori framework AS3 to JS cross compiler and builder.</description>
+    <version>0.1.4</version>
+    <vendor>Teoti Graphix, LLC</vendor>
+
+    <idea-version since-build="123.169"/>
+
+    <application-components>
+        <component>
+            <implementation-class>randori.plugin.components.RandoriApplicationComponent</implementation-class>
+        </component>
+        <component>
+            <implementation-class>randori.plugin.components.WorkspaceApplicationComponent</implementation-class>
+        </component>
+    </application-components>
+
+    <project-components>
+        <!--<component>-->
+        <!--<implementation-class>randori.plugin.builder.RandoriBuilderComponent</implementation-class>-->
+        <!--</component>-->
+        <component>
+            <implementation-class>randori.plugin.components.RandoriProjectComponent</implementation-class>
+        </component>
+        <component>
+            <implementation-class>randori.plugin.components.ASProjectComponent</implementation-class>
+        </component>
+    </project-components>
+
+    <module-components>
+        <!--<component>-->
+        <!--<implementation-class>randori.plugin.components.RandoriModuleComponent</implementation-class>-->
+        <!--</component>-->
+    </module-components>
+
+    <actions>
+        <action id="RandoriPlugin.BuildClean" class="randori.plugin.action.RunBuildCleanAction" text="Build and Clean Randori..."
+                description="Build and Cleans a Randori project">
+            <add-to-group group-id="BuildMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt C"/>
+        </action>
+        <action id="RandoriPlugin.Build" class="randori.plugin.action.RunBuildAction" text="Build Randori..."
+                description="Builds a Randori project">
+            <add-to-group group-id="BuildMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt R"/>
+        </action>
+
+        <!--<action class="randori.plugin.action.CreateActionScriptClassAction" text="AS Class" id="NewASClass">-->
+        <!--<add-to-group anchor="last" group-id="NewGroup"/>-->
+        <!--</action>-->
+
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+
+        <!--<fileTemplateGroup implementation="randori.plugin.action.RandoriTemplatesFactory"/>-->
+
+        <sdkType implementation="randori.plugin.roots.RandoriSdk"/>
+
+        <moduleType id="RANDORI_MODULE"
+                    implementationClass="randori.plugin.module.RandoriModuleType"
+                    classpathProvider="true"/>
+
+        <moduleConfigurationEditorProvider implementation="randori.plugin.module.RandoriModuleEditorsProvider"/>
+
+        <toolWindow id="Problems" anchor="bottom" icon="/icons/randori13x13.png"
+                    factoryClass="randori.plugin.ui.ProblemsToolWindowFactory"/>
+
+    </extensions>
+
+</idea-plugin>
