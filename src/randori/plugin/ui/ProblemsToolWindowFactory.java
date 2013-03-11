@@ -30,8 +30,10 @@ public class ProblemsToolWindowFactory implements ToolWindowFactory
 {
     public static final String WINDOW_ID = "Problems";
 
+    @SuppressWarnings("unused")
     private Project project;
 
+    @SuppressWarnings("unused")
     private ProblemsToolWindow window;
 
     @Override

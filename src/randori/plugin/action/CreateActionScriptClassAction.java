@@ -82,6 +82,7 @@ public class CreateActionScriptClassAction extends
         for (FileTemplate template : FileTemplateManager.getInstance()
                 .getAllTemplates())
         {
+            @SuppressWarnings("unused")
             FileType fileType = FileTypeManagerEx.getInstanceEx()
                     .getFileTypeByExtension(template.getExtension());
             if (/*fileType.equals(RandoriFileType.RANDORI_FILE_TYPE) && */JavaDirectoryService

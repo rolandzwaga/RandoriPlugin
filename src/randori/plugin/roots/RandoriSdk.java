@@ -53,11 +53,6 @@ public class RandoriSdk extends SdkType
         return findInstance(RandoriSdk.class);
     }
 
-    private void foo()
-    {
-
-    }
-
     // called by SdkType.setupSdkPaths()
     @Override
     public void setupSdkPaths(Sdk sdk)
@@ -80,6 +75,7 @@ public class RandoriSdk extends SdkType
 
         modificator.commitChanges();
 
+        @SuppressWarnings("unused")
         String sdkVersion = getVersion(sdkRoot);
         if (sdkRoot != null && sdkRoot.isValid())
             return;

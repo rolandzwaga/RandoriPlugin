@@ -51,6 +51,7 @@ public class RandoriRunnerConfigurationType implements ConfigurationType,
                 return configuration;
             }
 
+            @SuppressWarnings("unused")
             @Override
             public RunConfiguration createConfiguration(String name,
                     RunConfiguration template)

@@ -19,18 +19,16 @@
 
 package randori.plugin.components;
 
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.project.Project;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.flex.compiler.internal.projects.FlexProject;
 import org.apache.flex.compiler.internal.workspaces.Workspace;
 import org.apache.flex.compiler.projects.ICompilerProject;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.project.Project;
 
 /**
  * @author Michael Schmalle
@@ -77,16 +75,17 @@ public class WorkspaceApplicationComponent implements ApplicationComponent,
         return "WorkspaceApplicationComponent";
     }
 
+    @SuppressWarnings("unused")
     private void startupApplication()
     {
 
         //FlexProjectConfigurator.configure(project);
 
-        List<File> sourcePath = new ArrayList<File>();
+        //List<File> sourcePath = new ArrayList<File>();
         //sourcePath.add(new File(tempDir));
         //project.setSourcePath(sourcePath);
 
-        List<File> libraries = new ArrayList<File>();
+        //List<File> libraries = new ArrayList<File>();
         //project.addSourcePathFile();
         //project.setLibraries();
         //        compilationSuccess = application.build(

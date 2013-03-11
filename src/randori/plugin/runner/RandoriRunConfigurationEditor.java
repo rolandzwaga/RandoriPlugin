@@ -19,8 +19,7 @@
 
 package randori.plugin.runner;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
@@ -33,6 +32,9 @@ public class RandoriRunConfigurationEditor extends
 {
     private JPanel panel;
 
+    private JTextField webRoot;
+
+    @SuppressWarnings("unused")
     private final RandoriRunConfiguration configuration;
 
     public RandoriRunConfigurationEditor(RandoriRunConfiguration configuration)
@@ -51,7 +53,7 @@ public class RandoriRunConfigurationEditor extends
 
     public void getData(RandoriServerComponent data)
     {
-        //data.setBaseURL(baseURL.getText());
+        data.setWebRoot(webRoot.getText());
     }
 
     public JComponent getRootComponent()

@@ -84,6 +84,7 @@ public class RandoriTemplatesFactory implements
 
         final PsiFileFactory factory = PsiFileFactory.getInstance(directory
                 .getProject());
+        @SuppressWarnings("deprecation")
         final PsiFile file = factory.createFileFromText(fileName, text);
 
         return (PsiFile) directory.add(file);

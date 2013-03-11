@@ -36,7 +36,7 @@ import javax.swing.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@State(name = "MyRunnerSettings", storages = {@Storage(id = "jettyrunner", file = "$APP_CONFIG$/jettyrunner.xml")})
+@State(name = "MyRunnerSettings", storages = { @Storage(id = "jettyrunner", file = "$APP_CONFIG$/jettyrunner.xml") })
 /**
  * @author Michael Schmalle
  */
@@ -45,37 +45,37 @@ public class RandoriServerComponent implements ApplicationComponent,
 {
 
     private Server server;
+    private ExecutorService execService;
 
     @Override
     public void initComponent()
     {
         server = new Server();
-        NetworkTrafficSelectChannelConnector connector = new NetworkTrafficSelectChannelConnector(server);
+        NetworkTrafficSelectChannelConnector connector = new NetworkTrafficSelectChannelConnector(
+                server);
         connector.setPort(8080);
         server.addConnector(connector);
 
         ResourceHandler resource_handler = new ResourceHandler();
         resource_handler.setDirectoriesListed(true);
-        resource_handler.setWelcomeFiles(new String[]{"index.html"});
+        resource_handler.setWelcomeFiles(new String[] { "index.html" });
 
         resource_handler.setResourceBase("C:\\webroot");
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[]{resource_handler, new DefaultHandler()});
+        handlers.setHandlers(new Handler[] { resource_handler,
+                new DefaultHandler() });
 
         server.setHandler(handlers);
 
-        ExecutorService execService = Executors.newFixedThreadPool(1);
-
-        execService.submit(new Runnable()
-        {
+        execService = Executors.newFixedThreadPool(1);
+        execService.submit(new Runnable() {
             public void run()
             {
                 try
                 {
                     server.start();
                     server.join();
-                    System.in.read();
                 }
                 catch (Exception e)
                 {
@@ -92,6 +92,7 @@ public class RandoriServerComponent implements ApplicationComponent,
         try
         {
             server.stop();
+            execService.shutdown();
         }
         catch (Exception e)
         {
@@ -166,4 +167,31 @@ public class RandoriServerComponent implements ApplicationComponent,
         return null;
     }
 
+    //--------------------------------------------------------------------------
+    //
+    //--------------------------------------------------------------------------
+
+    private String webRoot = "index.html";
+
+    private int port = 8080;
+
+    public String getWebRoot()
+    {
+        return webRoot;
+    }
+
+    public void setWebRoot(String value)
+    {
+        webRoot = value;
+    }
+
+    public int getPort()
+    {
+        return port;
+    }
+
+    public void setPort(int value)
+    {
+        port = value;
+    }
 }

@@ -52,7 +52,7 @@ public class BuildSourceCommand
 
     public void parse(final Project project, final CompilerArguments arguments)
     {
-        final String name = project.getName();
+        //final String name = project.getName();
 
         ProgressManager.getInstance().run(
                 new Task.Backgroundable(project,
@@ -91,7 +91,7 @@ public class BuildSourceCommand
             final CompilerArguments arguments)
     {
         final String name = project.getName();
-        final VirtualFile file = project.getBaseDir();
+        //final VirtualFile file = project.getBaseDir();
 
         if (doClean)
             clean(project);
@@ -186,10 +186,10 @@ public class BuildSourceCommand
         final Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
         VirtualFile sdkRoot = sdk.getHomeDirectory();
 
-        final VirtualFile randoriSWC = sdkRoot
-                .findFileByRelativePath("bin/Randori.swc");
-        final VirtualFile randoriGuiceSWC = sdkRoot
-                .findFileByRelativePath("bin/RandoriGuice.swc");
+        //        final VirtualFile randoriSWC = sdkRoot
+        //                .findFileByRelativePath("bin/Randori.swc");
+        //        final VirtualFile randoriGuiceSWC = sdkRoot
+        //                .findFileByRelativePath("bin/RandoriGuice.swc");
 
         if (SdkUtils.libraryExists(project, "Randori")
                 && SdkUtils.libraryExists(project, "RandoriGuiceJS"))

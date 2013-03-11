@@ -57,6 +57,7 @@ public class ProblemsToolWindow
 
     ContentManager contentManager;
 
+    @SuppressWarnings("unused")
     private ToolWindow window;
 
     private JBTable table;
@@ -173,6 +174,7 @@ public class ProblemsToolWindow
         return instance.problems.size() > 0;
     }
 
+    @SuppressWarnings("serial")
     static class IconRenderer extends DefaultTableCellRenderer
     {
         public IconRenderer()
@@ -193,6 +195,7 @@ public class ProblemsToolWindow
         }
     }
 
+    @SuppressWarnings("serial")
     public static class ProblemsTableModel extends AbstractTableModel
     {
         private List<ICompilerProblem> problems;

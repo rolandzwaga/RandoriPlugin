@@ -46,7 +46,7 @@ public class RandoriModuleBuilder extends JavaModuleBuilder
     // Pair<Source Path, Package Prefix>
     private List<Pair<String, String>> mySourcePaths;
 
-    private final List<Pair<String, String>> myModuleLibraries = new ArrayList<Pair<String, String>>();
+    //private final List<Pair<String, String>> myModuleLibraries = new ArrayList<Pair<String, String>>();
 
     @Override
     public void setupRootModel(ModifiableRootModel rootModel)
@@ -123,6 +123,7 @@ public class RandoriModuleBuilder extends JavaModuleBuilder
         mySourcePaths.add(sourcePathInfo);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public ModuleType getModuleType()
     {

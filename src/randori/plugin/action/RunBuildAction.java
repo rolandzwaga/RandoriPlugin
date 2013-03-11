@@ -19,13 +19,13 @@
 
 package randori.plugin.action;
 
-import com.intellij.ide.BrowserUtil;
+import randori.plugin.components.RandoriProjectComponent;
+import randori.plugin.utils.ProjectUtils;
+
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
-import randori.plugin.components.RandoriProjectComponent;
-import randori.plugin.utils.ProjectUtils;
 
 /**
  * @author Michael Schmalle
@@ -40,7 +40,6 @@ public class RunBuildAction extends AnAction
         RandoriProjectComponent component = ProjectUtils
                 .getProjectComponent(project);
         component.build(false);
-        BrowserUtil.launchBrowser("http://localhost:8080/");
     }
 
 }

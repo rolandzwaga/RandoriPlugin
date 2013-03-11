@@ -179,7 +179,7 @@ public class ProjectUtils
         {
             if (!isModuleRoot(project, virtualFile.getName()))
             {
-                String name = virtualFile.getName();
+                //String name = virtualFile.getName();
                 result.add(virtualFile.getPath());
             }
         }
