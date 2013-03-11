@@ -50,7 +50,8 @@ import java.util.Set;
  */
 public class ProblemsToolWindow
 {
-    private static final String[] COLUMN_TITLES = new String[]{"Description", "Resource", "Path", "Location", "Type"};
+    private static final String[] COLUMN_TITLES = new String[] { "Description",
+            "Resource", "Path", "Location", "Type" };
 
     private static ProblemsToolWindow instance;
 
@@ -99,7 +100,8 @@ public class ProblemsToolWindow
 
         jPanel.add(jbScrollPane, BorderLayout.CENTER);
 
-        Content content = ContentFactory.SERVICE.getInstance().createContent(jPanel, tableName, false);
+        Content content = ContentFactory.SERVICE.getInstance().createContent(
+                jPanel, tableName, false);
         contentManager.addContent(content);
 
         ListSelectionModel listMod = table.getSelectionModel();
@@ -111,8 +113,7 @@ public class ProblemsToolWindow
         table.setCellSelectionEnabled(false);
         table.setRowSelectionAllowed(true);
 
-        table.addMouseListener(new MouseAdapter()
-        {
+        table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e)
             {
                 if (e.getClickCount() == 2)
@@ -147,7 +148,8 @@ public class ProblemsToolWindow
         if (!isValid(problem))
             return;
 
-        RandoriProjectComponent component = ProjectUtils.findProjectComponent(jPanel, RandoriProjectComponent.class);
+        RandoriProjectComponent component = ProjectUtils.findProjectComponent(
+                jPanel, RandoriProjectComponent.class);
         component.openFileForProblem(problem);
     }
 
@@ -170,7 +172,7 @@ public class ProblemsToolWindow
             return false;
         return instance.problems.size() > 0;
     }
-    
+
     static class IconRenderer extends DefaultTableCellRenderer
     {
         public IconRenderer()
@@ -195,13 +197,13 @@ public class ProblemsToolWindow
     {
         private List<ICompilerProblem> problems;
 
-//        @Override
-//        public Class<?> getColumnClass(int columnIndex)
-//        {
-//            if (columnIndex == 4)
-//                return ImageIcon.class;
-//            return super.getColumnClass(columnIndex);
-//        }
+        //        @Override
+        //        public Class<?> getColumnClass(int columnIndex)
+        //        {
+        //            if (columnIndex == 4)
+        //                return ImageIcon.class;
+        //            return super.getColumnClass(columnIndex);
+        //        }
 
         public ProblemsTableModel(List<ICompilerProblem> problems)
         {
@@ -238,16 +240,16 @@ public class ProblemsToolWindow
         {
             switch (index)
             {
-                case 0:
-                    return problem.toString();
-                case 1:
-                    return getName(problem);
-                case 2:
-                    return getPath(problem);
-                case 3:
-                    return Integer.toString(problem.getLine());
-                case 4:
-                    return getSeverty(problem);
+            case 0:
+                return problem.toString();
+            case 1:
+                return getName(problem);
+            case 2:
+                return getPath(problem);
+            case 3:
+                return Integer.toString(problem.getLine());
+            case 4:
+                return getSeverty(problem);
             }
             return "Not found";
         }
@@ -255,7 +257,8 @@ public class ProblemsToolWindow
         private String getSeverty(ICompilerProblem problem)
         {
             //return "icons/randori13x13.png";
-            DefaultSeverity defaultSeverity = problem.getClass().getAnnotation(DefaultSeverity.class);
+            DefaultSeverity defaultSeverity = problem.getClass().getAnnotation(
+                    DefaultSeverity.class);
             return defaultSeverity.value().toString();
         }
 

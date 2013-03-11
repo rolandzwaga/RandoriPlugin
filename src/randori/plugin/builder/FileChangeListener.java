@@ -40,7 +40,8 @@ public class FileChangeListener implements VirtualFileListener
         if (file != null && file.getExtension().equals("as"))
         {
             System.out.println(event.getFileName());
-            RandoriProjectComponent component = ProjectUtils.getProjectComponent(ProjectUtils.getProject());
+            RandoriProjectComponent component = ProjectUtils
+                    .getProjectComponent(ProjectUtils.getProject());
             component.reparse(file);
         }
     }

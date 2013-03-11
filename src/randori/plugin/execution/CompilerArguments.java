@@ -135,7 +135,7 @@ public class CompilerArguments
         result.add("-js-classes-as-files=true");
         result.add("-output=" + getOutput());
 
-        return result.toArray(new String[]{});
+        return result.toArray(new String[] {});
     }
 
     public void configure(Project project, RandoriProjectComponent component)

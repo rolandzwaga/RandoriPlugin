@@ -36,7 +36,8 @@ public class RunBuildAction extends AnAction
     public void actionPerformed(AnActionEvent event)
     {
         Project project = event.getData(PlatformDataKeys.PROJECT);
-        RandoriProjectComponent component = ProjectUtils.getProjectComponent(project);
+        RandoriProjectComponent component = ProjectUtils
+                .getProjectComponent(project);
         component.build(false);
     }
 

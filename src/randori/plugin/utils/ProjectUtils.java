@@ -42,38 +42,44 @@ import java.util.List;
 
 /**
  * A set of utilities for working with Projects and Modules.
- *
+ * 
  * @author Michael Schmalle
  */
 public class ProjectUtils
 {
     public static RandoriApplicationComponent getApplicationComponent()
     {
-        RandoriApplicationComponent component = ApplicationManager.getApplication().getComponent(RandoriApplicationComponent.class);
+        RandoriApplicationComponent component = ApplicationManager
+                .getApplication().getComponent(
+                        RandoriApplicationComponent.class);
         return component;
     }
 
     public static RandoriProjectComponent getProjectComponent(Project project)
     {
-        RandoriProjectComponent component = project.getComponent(RandoriProjectComponent.class);
+        RandoriProjectComponent component = project
+                .getComponent(RandoriProjectComponent.class);
         return component;
     }
 
     public static Project getProject()
     {
-        AsyncResult<DataContext> dataContext = DataManager.getInstance().getDataContextFromFocus();
+        AsyncResult<DataContext> dataContext = DataManager.getInstance()
+                .getDataContextFromFocus();
         Project project = DataKeys.PROJECT.getData(dataContext.getResult());
         return project;
     }
 
     public static Project getProject(Component component)
     {
-        DataContext dataContext = DataManager.getInstance().getDataContext(component);
+        DataContext dataContext = DataManager.getInstance().getDataContext(
+                component);
         Project project = DataKeys.PROJECT.getData(dataContext);
         return project;
     }
 
-    public static final <T> T findProjectComponent(Component component, Class<T> type)
+    public static final <T> T findProjectComponent(Component component,
+            Class<T> type)
     {
         final Project project = getProject(component);
         if (null != project)
@@ -87,7 +93,8 @@ public class ProjectUtils
     }
 
     @Nullable
-    public static final <T> T findProjectComponent(DataContext ctxt, Class<T> type)
+    public static final <T> T findProjectComponent(DataContext ctxt,
+            Class<T> type)
     {
         final Project project = PlatformDataKeys.PROJECT.getData(ctxt);
         if (null != project)
@@ -102,7 +109,7 @@ public class ProjectUtils
 
     /**
      * Returns whether there is an installed Sdk within the project.
-     *
+     * 
      * @param project The project.
      */
     public static final boolean isSDKInstalled(Project project)
@@ -112,7 +119,7 @@ public class ProjectUtils
 
     /**
      * Return the Sdk base path.
-     *
+     * 
      * @param project The project
      */
     public static final String getSDKBasePath(Project project)
@@ -124,7 +131,7 @@ public class ProjectUtils
 
     /**
      * Return the current <code>playerglobal.swc</code> for the current Sdk.
-     *
+     * 
      * @param project The project.
      */
     public static final String getPlayerGloablPath(Project project)
@@ -136,7 +143,7 @@ public class ProjectUtils
 
     /**
      * Return a List of all swcs found within the Project.
-     *
+     * 
      * @param project The project.
      */
     public static final List<String> getAllProjectSWCs(Project project)
@@ -159,14 +166,15 @@ public class ProjectUtils
 
     /**
      * Return a List of all source paths found in the Project.
-     *
+     * 
      * @param project The project.
      */
     public static final List<String> getAllProjectSourcePaths(Project project)
     {
         ArrayList<String> result = new ArrayList<String>();
         // Randori/src, RandoriGuiceJS/src, RandorFlash, RandoriFlash
-        VirtualFile[] roots = ProjectRootManager.getInstance(project).getContentRootsFromAllModules();
+        VirtualFile[] roots = ProjectRootManager.getInstance(project)
+                .getContentRootsFromAllModules();
         for (VirtualFile virtualFile : roots)
         {
             if (!isModuleRoot(project, virtualFile.getName()))
@@ -182,9 +190,9 @@ public class ProjectUtils
      * Return whether the name is a Module root name in the project.
      * <p/>
      * I'm not sure this method works as desired yet.
-     *
+     * 
      * @param project The project.
-     * @param name    A name to compare with all project Module names
+     * @param name A name to compare with all project Module names
      */
     public static boolean isModuleRoot(Project project, String name)
     {

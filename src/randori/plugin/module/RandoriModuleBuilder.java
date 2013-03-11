@@ -49,7 +49,8 @@ public class RandoriModuleBuilder extends JavaModuleBuilder
     private final List<Pair<String, String>> myModuleLibraries = new ArrayList<Pair<String, String>>();
 
     @Override
-    public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException
+    public void setupRootModel(ModifiableRootModel rootModel)
+            throws ConfigurationException
     {
         // adds the project/module's root as a content entry, this allows /generated
         // etc. to be seen in the project explorer
@@ -65,29 +66,32 @@ public class RandoriModuleBuilder extends JavaModuleBuilder
                 {
                     String first = sourcePath.first;
                     new File(first).mkdirs();
-                    final VirtualFile sourceRoot = LocalFileSystem.getInstance()
-                            .refreshAndFindFileByPath(FileUtil.toSystemIndependentName(first));
+                    final VirtualFile sourceRoot = LocalFileSystem
+                            .getInstance().refreshAndFindFileByPath(
+                                    FileUtil.toSystemIndependentName(first));
                     if (sourceRoot != null)
                     {
-                        contentEntry.addSourceFolder(sourceRoot, false, sourcePath.second);
+                        contentEntry.addSourceFolder(sourceRoot, false,
+                                sourcePath.second);
                     }
                 }
             }
         }
 
-        List<Sdk> sdks = ProjectJdkTable.getInstance().getSdksOfType(RandoriSdk.getInstance());
+        List<Sdk> sdks = ProjectJdkTable.getInstance().getSdksOfType(
+                RandoriSdk.getInstance());
         if (sdks.size() > 0)
         {
             rootModel.setSdk(sdks.get(0));
         }
 
-//        // copy the files to generated
-//        VirtualFile randoriJS = sdkRoot.findFileByRelativePath("src/Randori.js");
-//        VirtualFile guiceJS = sdkRoot.findFileByRelativePath("src/RandoriGuiceJS.js");
-//        VirtualFile newRandoriJS = newFile;
-//        VirtualFile newRandoriGuiceJS = newFile;
-//        randoriJS.copy(this, newRandoriJS, "Randori.js");
-//        randoriJS.copy(this, newRandoriGuiceJS, "RandoriGuiceJS.js");
+        //        // copy the files to generated
+        //        VirtualFile randoriJS = sdkRoot.findFileByRelativePath("src/Randori.js");
+        //        VirtualFile guiceJS = sdkRoot.findFileByRelativePath("src/RandoriGuiceJS.js");
+        //        VirtualFile newRandoriJS = newFile;
+        //        VirtualFile newRandoriGuiceJS = newFile;
+        //        randoriJS.copy(this, newRandoriJS, "Randori.js");
+        //        randoriJS.copy(this, newRandoriGuiceJS, "RandoriGuiceJS.js");
     }
 
     public List<Pair<String, String>> getSourcePaths()
@@ -95,7 +99,8 @@ public class RandoriModuleBuilder extends JavaModuleBuilder
         if (mySourcePaths == null)
         {
             final List<Pair<String, String>> paths = new ArrayList<Pair<String, String>>();
-            @NonNls final String path = getContentEntryPath() + File.separator + "src";
+            @NonNls
+            final String path = getContentEntryPath() + File.separator + "src";
             new File(path).mkdirs();
             paths.add(Pair.create(path, ""));
             return paths;
@@ -105,7 +110,8 @@ public class RandoriModuleBuilder extends JavaModuleBuilder
 
     public void setSourcePaths(List<Pair<String, String>> sourcePaths)
     {
-        mySourcePaths = sourcePaths != null ? new ArrayList<Pair<String, String>>(sourcePaths) : null;
+        mySourcePaths = sourcePaths != null ? new ArrayList<Pair<String, String>>(
+                sourcePaths) : null;
     }
 
     public void addSourcePath(Pair<String, String> sourcePathInfo)

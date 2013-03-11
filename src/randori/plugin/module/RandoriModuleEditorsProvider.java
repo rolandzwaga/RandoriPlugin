@@ -32,15 +32,19 @@ import java.util.List;
 /**
  * @author Michael Schmalle
  */
-public class RandoriModuleEditorsProvider implements ModuleConfigurationEditorProvider
+public class RandoriModuleEditorsProvider implements
+        ModuleConfigurationEditorProvider
 {
     @Override
-    public ModuleConfigurationEditor[] createEditors(ModuleConfigurationState state)
+    public ModuleConfigurationEditor[] createEditors(
+            ModuleConfigurationState state)
     {
         final Module module = state.getRootModel().getModule();
-        if (ModuleType.get(module) != RandoriModuleType.getInstance()) return ModuleConfigurationEditor.EMPTY;
+        if (ModuleType.get(module) != RandoriModuleType.getInstance())
+            return ModuleConfigurationEditor.EMPTY;
 
-        final DefaultModuleConfigurationEditorFactory editorFactory = DefaultModuleConfigurationEditorFactory.getInstance();
+        final DefaultModuleConfigurationEditorFactory editorFactory = DefaultModuleConfigurationEditorFactory
+                .getInstance();
         List<ModuleConfigurationEditor> editors = new ArrayList<ModuleConfigurationEditor>();
         editors.add(editorFactory.createModuleContentRootsEditor(state));
         editors.add(editorFactory.createOutputEditor(state));

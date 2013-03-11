@@ -10,7 +10,8 @@ import javax.swing.*;
 /**
  * @author Michael Schmalle
  */
-public class RandoriProjectConfigurationForm extends SettingsEditor<RandoriProjectConfigurationForm>
+public class RandoriProjectConfigurationForm extends
+        SettingsEditor<RandoriProjectConfigurationForm>
 {
 
     private JPanel panel;
@@ -39,13 +40,14 @@ public class RandoriProjectConfigurationForm extends SettingsEditor<RandoriProje
     protected void resetEditorFrom(RandoriProjectConfigurationForm model)
     {
         // apply the saved model to the components
-//        basePath.setText(model.getBasePath());
-//        libraryPath.setText(model.getLibraryPath());
-//        exportAsFiles.setSelected(model.isClassesAsFile());
+        //        basePath.setText(model.getBasePath());
+        //        libraryPath.setText(model.getLibraryPath());
+        //        exportAsFiles.setSelected(model.isClassesAsFile());
     }
 
     @Override
-    protected void applyEditorTo(RandoriProjectConfigurationForm s) throws ConfigurationException
+    protected void applyEditorTo(RandoriProjectConfigurationForm s)
+            throws ConfigurationException
     {
     }
 
@@ -65,7 +67,8 @@ public class RandoriProjectConfigurationForm extends SettingsEditor<RandoriProje
     {
         if (isOpposite(exportAsFiles, data.isClassesAsFile()))
             return true;
-        return isModified(basePath, data.getBasePath()) || isModified(libraryPath, data.getLibraryPath());
+        return isModified(basePath, data.getBasePath())
+                || isModified(libraryPath, data.getLibraryPath());
 
     }
 
@@ -76,8 +79,7 @@ public class RandoriProjectConfigurationForm extends SettingsEditor<RandoriProje
 
     private boolean isModified(JTextField field, String value)
     {
-        return field.getText() != null ?
-                !field.getText().equals(value) :
-                value != null;
+        return field.getText() != null ? !field.getText().equals(value)
+                : value != null;
     }
 }

@@ -54,38 +54,41 @@ public class BuildSourceCommand
     {
         final String name = project.getName();
 
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Randori compiler building project", true, null)
-        {
-            @Override
-            public void run(@NotNull ProgressIndicator indicator)
-            {
-                final Set<ICompilerProblem> problems = new HashSet<ICompilerProblem>();
-                RandoriBackend backend = new RandoriBackend();
-                backend.parseOnly(true);
-                final Randori randori = new Randori(backend);
-
-                // need to only parse not generate
-                final int code = randori.mainNoExit(arguments.toArguments(), problems);
-
-                if (code == 0)
-                {
-                    // for now the chance we have SWC warnings
-                    problems.clear();
-                }
-
-                ApplicationManager.getApplication().invokeLater(new Runnable()
-                {
+        ProgressManager.getInstance().run(
+                new Task.Backgroundable(project,
+                        "Randori compiler building project", true, null) {
                     @Override
-                    public void run()
+                    public void run(@NotNull ProgressIndicator indicator)
                     {
-                        ProblemsToolWindow.refresh(problems);
+                        final Set<ICompilerProblem> problems = new HashSet<ICompilerProblem>();
+                        RandoriBackend backend = new RandoriBackend();
+                        backend.parseOnly(true);
+                        final Randori randori = new Randori(backend);
+
+                        // need to only parse not generate
+                        final int code = randori.mainNoExit(
+                                arguments.toArguments(), problems);
+
+                        if (code == 0)
+                        {
+                            // for now the chance we have SWC warnings
+                            problems.clear();
+                        }
+
+                        ApplicationManager.getApplication().invokeLater(
+                                new Runnable() {
+                                    @Override
+                                    public void run()
+                                    {
+                                        ProblemsToolWindow.refresh(problems);
+                                    }
+                                });
                     }
                 });
-            }
-        });
     }
 
-    public void build(final Project project, boolean doClean, final CompilerArguments arguments)
+    public void build(final Project project, boolean doClean,
+            final CompilerArguments arguments)
     {
         final String name = project.getName();
         final VirtualFile file = project.getBaseDir();
@@ -93,60 +96,72 @@ public class BuildSourceCommand
         if (doClean)
             clean(project);
 
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Randori compiler building project", true, null)
-        {
-            @Override
-            public void run(@NotNull ProgressIndicator indicator)
-            {
-                final Set<ICompilerProblem> problems = new HashSet<ICompilerProblem>();
-                IBackend backend = new RandoriBackend();
-                final Randori randori = new Randori(backend);
-                final int code = randori.mainNoExit(arguments.toArguments(), problems);
-
-                if (code == 0)
-                {
-                    NotificationUtils.sendRandoriInformation("Success", "Successfully compiled and built project '" + name + "'");
-                }
-                else
-                {
-                    ApplicationManager.getApplication().invokeLater(new Runnable()
+        ProgressManager.getInstance().run(
+                new Task.Backgroundable(project,
+                        "Randori compiler building project", true, null) {
+                    @Override
+                    public void run(@NotNull ProgressIndicator indicator)
                     {
-                        @Override
-                        public void run()
+                        final Set<ICompilerProblem> problems = new HashSet<ICompilerProblem>();
+                        IBackend backend = new RandoriBackend();
+                        final Randori randori = new Randori(backend);
+                        final int code = randori.mainNoExit(
+                                arguments.toArguments(), problems);
+
+                        if (code == 0)
                         {
-                            ProblemsToolWindow.refresh(problems);
+                            NotificationUtils.sendRandoriInformation("Success",
+                                    "Successfully compiled and built project '"
+                                            + name + "'");
                         }
-                    });
+                        else
+                        {
+                            ApplicationManager.getApplication().invokeLater(
+                                    new Runnable() {
+                                        @Override
+                                        public void run()
+                                        {
+                                            ProblemsToolWindow
+                                                    .refresh(problems);
+                                        }
+                                    });
 
-                    if (ProblemsToolWindow.hasErrors())
-                    {
-                        NotificationUtils.sendRandoriInformation("Error", "Error in project, Check Problems view for more information '" + toErrorCode(code) + "'");
-                    }
-                    else
-                    {
-                        // XXX This is temp until I get the ProblemQuery yanked out of the compiler
-                        // this would hit here if there are still Warnings but the build passed
-                        NotificationUtils.sendRandoriInformation("Success", "Successfully compiled and built project with warnings '" + name + "'");
-                    }
-                }
+                            if (ProblemsToolWindow.hasErrors())
+                            {
+                                NotificationUtils.sendRandoriInformation(
+                                        "Error",
+                                        "Error in project, Check Problems view for more information '"
+                                                + toErrorCode(code) + "'");
+                            }
+                            else
+                            {
+                                // XXX This is temp until I get the ProblemQuery yanked out of the compiler
+                                // this would hit here if there are still Warnings but the build passed
+                                NotificationUtils.sendRandoriInformation(
+                                        "Success",
+                                        "Successfully compiled and built project with warnings '"
+                                                + name + "'");
+                            }
+                        }
 
-                copySdkLibraries(project);
-            }
-        });
+                        copySdkLibraries(project);
+                    }
+                });
     }
 
     private void clean(Project project)
     {
         final VirtualFile file = project.getBaseDir();
-        final RandoriProjectComponent component = ProjectUtils.getProjectComponent(project);
+        final RandoriProjectComponent component = ProjectUtils
+                .getProjectComponent(project);
 
-        ApplicationManager.getApplication().runWriteAction(new Runnable()
-        {
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run()
             {
                 // wipe the generated directory
-                VirtualFile virtualFile = file.findFileByRelativePath(component.getBasePath());
+                VirtualFile virtualFile = file.findFileByRelativePath(component
+                        .getBasePath());
                 try
                 {
                     if (virtualFile != null && virtualFile.exists())
@@ -171,12 +186,17 @@ public class BuildSourceCommand
         final Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
         VirtualFile sdkRoot = sdk.getHomeDirectory();
 
-        final VirtualFile randoriSWC = sdkRoot.findFileByRelativePath("bin/Randori.swc");
-        final VirtualFile randoriGuiceSWC = sdkRoot.findFileByRelativePath("bin/RandoriGuice.swc");
+        final VirtualFile randoriSWC = sdkRoot
+                .findFileByRelativePath("bin/Randori.swc");
+        final VirtualFile randoriGuiceSWC = sdkRoot
+                .findFileByRelativePath("bin/RandoriGuice.swc");
 
-        if (SdkUtils.libraryExists(project, "Randori") && SdkUtils.libraryExists(project, "RandoriGuiceJS"))
+        if (SdkUtils.libraryExists(project, "Randori")
+                && SdkUtils.libraryExists(project, "RandoriGuiceJS"))
         {
-            String libPath = project.getComponent(RandoriProjectComponent.class).getLibraryPath();
+            String libPath = project
+                    .getComponent(RandoriProjectComponent.class)
+                    .getLibraryPath();
 
             VirtualFile libraryDir = baseDir.findFileByRelativePath(libPath);
             if (libraryDir == null)
@@ -186,17 +206,22 @@ public class BuildSourceCommand
             }
 
             // copy the files to generated
-            VirtualFile randoriJS = sdkRoot.findFileByRelativePath("src/Randori.js");
-            VirtualFile guiceJS = sdkRoot.findFileByRelativePath("src/RandoriGuiceJS.js");
+            VirtualFile randoriJS = sdkRoot
+                    .findFileByRelativePath("src/Randori.js");
+            VirtualFile guiceJS = sdkRoot
+                    .findFileByRelativePath("src/RandoriGuiceJS.js");
 
             try
             {
-                FileUtil.copy(new File(randoriJS.getPath()), new File(baseDir.getPath(), libPath + "/Randori.js"));
-                FileUtil.copy(new File(guiceJS.getPath()), new File(baseDir.getPath(), libPath + "/RandoriGuiceJS.js"));
+                FileUtil.copy(new File(randoriJS.getPath()),
+                        new File(baseDir.getPath(), libPath + "/Randori.js"));
+                FileUtil.copy(new File(guiceJS.getPath()),
+                        new File(baseDir.getPath(), libPath
+                                + "/RandoriGuiceJS.js"));
             }
             catch (IOException e)
             {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace(); //To change body of catch statement use File | Settings | File Templates.
             }
 
         }
@@ -210,14 +235,14 @@ public class BuildSourceCommand
     {
         switch (code)
         {
-            case 1:
-                return "Unknown";
-            case 2:
-                return "Compiler problems";
-            case 3:
-                return "Compiler Exceptions";
-            case 4:
-                return "Configuration Problems";
+        case 1:
+            return "Unknown";
+        case 2:
+            return "Compiler problems";
+        case 3:
+            return "Compiler Exceptions";
+        case 4:
+            return "Configuration Problems";
         }
 
         return "Unkown error code";

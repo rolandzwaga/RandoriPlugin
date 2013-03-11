@@ -32,12 +32,13 @@ public class VFileUtils
 
     /**
      * Returns a VirtualFile from the absolute path given.
-     *
+     * 
      * @param path The native file path.
      */
     public static VirtualFile getFile(String path)
     {
-        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File(path));
+        VirtualFile virtualFile = LocalFileSystem.getInstance()
+                .findFileByIoFile(new File(path));
         return virtualFile;
     }
 

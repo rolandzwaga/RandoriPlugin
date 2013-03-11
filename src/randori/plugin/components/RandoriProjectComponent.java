@@ -48,18 +48,13 @@ import javax.swing.*;
 /**
  * Autopackage module adds new module tab and holds plugin configuration.
  */
-@State(
-        name = RandoriProjectComponent.COMPONENT_NAME,
-        storages = {
-                @Storage(id = "randoriproject", file = "$PROJECT_FILE$")}
-)
-
+@State(name = RandoriProjectComponent.COMPONENT_NAME, storages = { @Storage(id = "randoriproject", file = "$PROJECT_FILE$") })
 // TODO Need to get the state out of this component and into a Model class
-
 /**
  * @author Michael Schmalle
  */
-public class RandoriProjectComponent implements ProjectComponent, Configurable, PersistentStateComponent<RandoriProjectComponent>
+public class RandoriProjectComponent implements ProjectComponent, Configurable,
+        PersistentStateComponent<RandoriProjectComponent>
 {
     public static final String COMPONENT_NAME = "RandoriProject";
 
@@ -91,10 +86,13 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable, 
 
     public void parse()
     {
-        RandoriApplicationComponent applicationComponent = ProjectUtils.getApplicationComponent();
-        RandoriProjectComponent projectComponent = ProjectUtils.getProjectComponent(project);
+        RandoriApplicationComponent applicationComponent = ProjectUtils
+                .getApplicationComponent();
+        RandoriProjectComponent projectComponent = ProjectUtils
+                .getProjectComponent(project);
 
-        CompilerArguments arguments = applicationComponent.getCompilerArguments();
+        CompilerArguments arguments = applicationComponent
+                .getCompilerArguments();
         projectComponent.configureDependencies(project, arguments);
 
         applicationComponent.getBuildSourceCommand().parse(project, arguments);
@@ -102,39 +100,47 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable, 
 
     /**
      * Builds the current Project by doing a full parse and output render.
-     *
+     * 
      * @param doClean
      */
     public void build(boolean doClean)
     {
-        RandoriApplicationComponent applicationComponent = ProjectUtils.getApplicationComponent();
-        RandoriProjectComponent projectComponent = ProjectUtils.getProjectComponent(project);
+        RandoriApplicationComponent applicationComponent = ProjectUtils
+                .getApplicationComponent();
+        RandoriProjectComponent projectComponent = ProjectUtils
+                .getProjectComponent(project);
 
-        CompilerArguments arguments = applicationComponent.getCompilerArguments();
+        CompilerArguments arguments = applicationComponent
+                .getCompilerArguments();
         projectComponent.configureDependencies(project, arguments);
 
-        applicationComponent.getBuildSourceCommand().build(project, doClean, arguments);
+        applicationComponent.getBuildSourceCommand().build(project, doClean,
+                arguments);
     }
 
     /**
-     * Opens a ICompilerProblem in a new editor, or opens the editor and places the
-     * caret a the specific proplem.
-     *
+     * Opens a ICompilerProblem in a new editor, or opens the editor and places
+     * the caret a the specific proplem.
+     * 
      * @param problem The ICompilerProblem to focus.
      */
     public void openFileForProblem(ICompilerProblem problem)
     {
         VirtualFile virtualFile = VFileUtils.getFile(problem.getSourcePath());
-        OpenFileDescriptor descriptor = new OpenFileDescriptor(project, virtualFile);
-        Editor editor = FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
-        LogicalPosition position = new LogicalPosition(problem.getLine(), problem.getColumn());
+        OpenFileDescriptor descriptor = new OpenFileDescriptor(project,
+                virtualFile);
+        Editor editor = FileEditorManager.getInstance(project).openTextEditor(
+                descriptor, true);
+        LogicalPosition position = new LogicalPosition(problem.getLine(),
+                problem.getColumn());
         editor.getCaretModel().moveToLogicalPosition(position);
     }
 
     @Override
     public void projectOpened()
     {
-        ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
+        ProjectRootManager projectRootManager = ProjectRootManager
+                .getInstance(project);
         VirtualFile[] sourceRoots = projectRootManager.getContentSourceRoots();
     }
 
@@ -235,7 +241,8 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable, 
     {
     }
 
-    public void configureDependencies(Project project, CompilerArguments arguments)
+    public void configureDependencies(Project project,
+            CompilerArguments arguments)
     {
         arguments.clear();
 
@@ -264,7 +271,8 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable, 
         for (Module module : modules)
         {
             // RandoriFlash/src
-            for (VirtualFile virtualFile : ModuleRootManager.getInstance(module).getSourceRoots())
+            for (VirtualFile virtualFile : ModuleRootManager
+                    .getInstance(module).getSourceRoots())
             {
                 arguments.addSourcepath(virtualFile.getPath());
             }

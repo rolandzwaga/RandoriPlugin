@@ -34,16 +34,12 @@ import javax.swing.*;
 /**
  * Autopackage module adds new module tab and holds plugin configuration.
  */
-@State(
-        name = RandoriModuleComponent.COMPONENT_NAME,
-        storages = {
-                @Storage(id = "randoricompiler", file = "$MODULE_FILE$")}
-)
-
+@State(name = RandoriModuleComponent.COMPONENT_NAME, storages = { @Storage(id = "randoricompiler", file = "$MODULE_FILE$") })
 /**
  * @author Michael Schmalle
  */
-public class RandoriModuleComponent implements ModuleComponent, Configurable, PersistentStateComponent<RandoriModuleComponent>
+public class RandoriModuleComponent implements ModuleComponent, Configurable,
+        PersistentStateComponent<RandoriModuleComponent>
 {
 
     public static final String COMPONENT_NAME = "RandoriBuilder";

@@ -10,7 +10,8 @@ import javax.swing.*;
 /**
  * @author Michael Schmalle
  */
-public class RandoriModuleConfigurationForm extends SettingsEditor<RandoriModuleModel>
+public class RandoriModuleConfigurationForm extends
+        SettingsEditor<RandoriModuleModel>
 {
 
     private JPanel panel;
@@ -45,7 +46,8 @@ public class RandoriModuleConfigurationForm extends SettingsEditor<RandoriModule
     }
 
     @Override
-    protected void applyEditorTo(RandoriModuleModel s) throws ConfigurationException
+    protected void applyEditorTo(RandoriModuleModel s)
+            throws ConfigurationException
     {
         // saved the state of the components to the config state
         // TODO implement the properties in the config
@@ -65,14 +67,14 @@ public class RandoriModuleConfigurationForm extends SettingsEditor<RandoriModule
 
     public boolean isModified(RandoriModuleComponent data)
     {
-        return isModified(basePath, data.getBasePath()) || isModified(libraryPath, data.getLibraryPath());
+        return isModified(basePath, data.getBasePath())
+                || isModified(libraryPath, data.getLibraryPath());
 
     }
 
     private boolean isModified(JTextField field, String value)
     {
-        return field.getText() != null ?
-                !field.getText().equals(value) :
-                value != null;
+        return field.getText() != null ? !field.getText().equals(value)
+                : value != null;
     }
 }

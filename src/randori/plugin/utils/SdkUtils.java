@@ -35,14 +35,16 @@ public class SdkUtils
     {
         final Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
         final VirtualFile sdkRoot = sdk.getHomeDirectory();
-        final VirtualFile swc = sdkRoot.findFileByRelativePath("bin/" + name + ".swc");
+        final VirtualFile swc = sdkRoot.findFileByRelativePath("bin/" + name
+                + ".swc");
         return swc != null && swc.exists();
     }
 
     public static boolean libraryExists(Project project, String name)
     {
         final Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
-        VirtualFile[] files = sdk.getRootProvider().getFiles(OrderRootType.CLASSES);
+        VirtualFile[] files = sdk.getRootProvider().getFiles(
+                OrderRootType.CLASSES);
         for (VirtualFile file : files)
         {
             String fileName = file.getName();

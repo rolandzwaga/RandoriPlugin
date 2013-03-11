@@ -44,7 +44,6 @@ public class ProblemsToolWindowFactory implements ToolWindowFactory
 
 }
 
-
 /*
 
 DefaultActionGroup group = new DefaultActionGroup();

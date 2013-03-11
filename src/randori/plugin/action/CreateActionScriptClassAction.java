@@ -39,12 +39,14 @@ import randori.plugin.module.RandoriModuleType;
 /**
  * @author Michael Schmalle
  */
-public class CreateActionScriptClassAction extends JavaCreateTemplateInPackageAction<PsiElement>
+public class CreateActionScriptClassAction extends
+        JavaCreateTemplateInPackageAction<PsiElement>
 
 {
     public CreateActionScriptClassAction()
     {
-        super("Create new AS Class", "Creates a new ActionScript class", RandoriModuleType.RANDORI_ICON_SMALL, true);
+        super("Create new AS Class", "Creates a new ActionScript class",
+                RandoriModuleType.RANDORI_ICON_SMALL, true);
     }
 
     @Nullable
@@ -56,35 +58,45 @@ public class CreateActionScriptClassAction extends JavaCreateTemplateInPackageAc
 
     @Nullable
     @Override
-    protected PsiElement doCreate(PsiDirectory dir, String className, String templateName) throws IncorrectOperationException
+    protected PsiElement doCreate(PsiDirectory dir, String className,
+            String templateName) throws IncorrectOperationException
     {
         // dir
         // className = 'as'
         // templateName 'template'
 
         final String fileName = className + ".as";
-        final PsiFile fromTemplate = RandoriTemplatesFactory.createFromTemplate(dir, className, fileName, templateName);
+        final PsiFile fromTemplate = RandoriTemplatesFactory
+                .createFromTemplate(dir, className, fileName, templateName);
 
-        return fromTemplate;  //To change body of implemented methods use File | Settings | File Templates.
+        return fromTemplate; //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder)
+    protected void buildDialog(Project project, PsiDirectory directory,
+            CreateFileFromTemplateDialog.Builder builder)
     {
-        builder.setTitle("Create new Class").addKind("Class", RandoriModuleType.RANDORI_ICON_SMALL, "RandoriClass.as");
+        builder.setTitle("Create new Class").addKind("Class",
+                RandoriModuleType.RANDORI_ICON_SMALL, "RandoriClass.as");
 
-        for (FileTemplate template : FileTemplateManager.getInstance().getAllTemplates())
+        for (FileTemplate template : FileTemplateManager.getInstance()
+                .getAllTemplates())
         {
-            FileType fileType = FileTypeManagerEx.getInstanceEx().getFileTypeByExtension(template.getExtension());
-            if (/*fileType.equals(RandoriFileType.RANDORI_FILE_TYPE) && */JavaDirectoryService.getInstance().getPackage(directory) != null)
+            FileType fileType = FileTypeManagerEx.getInstanceEx()
+                    .getFileTypeByExtension(template.getExtension());
+            if (/*fileType.equals(RandoriFileType.RANDORI_FILE_TYPE) && */JavaDirectoryService
+                    .getInstance().getPackage(directory) != null)
             {
-                builder.addKind(template.getName(), RandoriModuleType.RANDORI_ICON_SMALL, template.getName());
+                builder.addKind(template.getName(),
+                        RandoriModuleType.RANDORI_ICON_SMALL,
+                        template.getName());
             }
         }
     }
 
     @Override
-    protected String getActionName(PsiDirectory directory, String newName, String templateName)
+    protected String getActionName(PsiDirectory directory, String newName,
+            String templateName)
     {
         return "New AS Class";
     }
@@ -92,6 +104,6 @@ public class CreateActionScriptClassAction extends JavaCreateTemplateInPackageAc
     @Override
     protected boolean isAvailable(DataContext dataContext)
     {
-        return true;          // return super.isAvailable(dataContext) && LibrariesUtil.hasRandoriSdk(LangDataKeys.MODULE.getData(dataContext));
+        return true; // return super.isAvailable(dataContext) && LibrariesUtil.hasRandoriSdk(LangDataKeys.MODULE.getData(dataContext));
     }
 }

@@ -37,11 +37,13 @@ import java.util.Properties;
 /**
  * @author Michael Schmalle
  */
-public class RandoriTemplatesFactory implements FileTemplateGroupDescriptorFactory
+public class RandoriTemplatesFactory implements
+        FileTemplateGroupDescriptorFactory
 {
 
     @NonNls
-    public static final String[] TEMPLATES = {RandoriTemplates.RANDORI_CLASS, RandoriTemplates.RANDORI_INTERFACE};
+    public static final String[] TEMPLATES = { RandoriTemplates.RANDORI_CLASS,
+            RandoriTemplates.RANDORI_INTERFACE };
 
     @NonNls
     static final String NAME_TEMPLATE_PROPERTY = "NAME";
@@ -50,18 +52,20 @@ public class RandoriTemplatesFactory implements FileTemplateGroupDescriptorFacto
 
     private final ArrayList<String> myCustomTemplates = new ArrayList<String>();
 
-    public static PsiFile createFromTemplate(@NotNull final PsiDirectory directory,
-                                             @NotNull final String name,
-                                             @NotNull String fileName,
-                                             @NotNull String templateName,
-                                             @NonNls String... parameters) throws IncorrectOperationException
+    public static PsiFile createFromTemplate(
+            @NotNull final PsiDirectory directory, @NotNull final String name,
+            @NotNull String fileName, @NotNull String templateName,
+            @NonNls String... parameters) throws IncorrectOperationException
     {
-        final FileTemplate template = FileTemplateManager.getInstance().getTemplate(templateName);
+        final FileTemplate template = FileTemplateManager.getInstance()
+                .getTemplate(templateName);
 
-        Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties(directory.getProject()));
+        Properties properties = new Properties(FileTemplateManager
+                .getInstance().getDefaultProperties(directory.getProject()));
         JavaTemplateUtil.setPackageNameAttribute(properties, directory);
         properties.setProperty(NAME_TEMPLATE_PROPERTY, name);
-        properties.setProperty(LOW_CASE_NAME_TEMPLATE_PROPERTY, name.substring(0, 1).toLowerCase() + name.substring(1));
+        properties.setProperty(LOW_CASE_NAME_TEMPLATE_PROPERTY,
+                name.substring(0, 1).toLowerCase() + name.substring(1));
         for (int i = 0; i < parameters.length; i += 2)
         {
             properties.setProperty(parameters[i], parameters[i + 1]);
@@ -73,11 +77,13 @@ public class RandoriTemplatesFactory implements FileTemplateGroupDescriptorFacto
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Unable to load template for " + FileTemplateManager.getInstance().internalTemplateToSubject(templateName),
-                    e);
+            throw new RuntimeException("Unable to load template for "
+                    + FileTemplateManager.getInstance()
+                            .internalTemplateToSubject(templateName), e);
         }
 
-        final PsiFileFactory factory = PsiFileFactory.getInstance(directory.getProject());
+        final PsiFileFactory factory = PsiFileFactory.getInstance(directory
+                .getProject());
         final PsiFile file = factory.createFileFromText(fileName, text);
 
         return (PsiFile) directory.add(file);
@@ -91,20 +97,23 @@ public class RandoriTemplatesFactory implements FileTemplateGroupDescriptorFacto
     @Override
     public FileTemplateGroupDescriptor getFileTemplatesDescriptor()
     {
-        final FileTemplateGroupDescriptor group = new FileTemplateGroupDescriptor("Templates", RandoriModuleType.RANDORI_ICON_SMALL);
+        final FileTemplateGroupDescriptor group = new FileTemplateGroupDescriptor(
+                "Templates", RandoriModuleType.RANDORI_ICON_SMALL);
         final FileTypeManager fileTypeManager = FileTypeManager.getInstance();
         for (String template : TEMPLATES)
         {
-            group.addTemplate(new FileTemplateDescriptor(template, fileTypeManager.getFileTypeByFileName(template).getIcon()));
+            group.addTemplate(new FileTemplateDescriptor(template,
+                    fileTypeManager.getFileTypeByFileName(template).getIcon()));
         }
-//        //add GSP Template
-//        group.addTemplate(new FileTemplateDescriptor(
-//                RandoriTemplates.GROOVY_SERVER_PAGE, fileTypeManager.getFileTypeByFileName(GroovyTemplates.GROOVY_SERVER_PAGE).getIcon()));
+        //        //add GSP Template
+        //        group.addTemplate(new FileTemplateDescriptor(
+        //                RandoriTemplates.GROOVY_SERVER_PAGE, fileTypeManager.getFileTypeByFileName(GroovyTemplates.GROOVY_SERVER_PAGE).getIcon()));
 
         // register custom templates
         for (String template : getInstance().getCustomTemplates())
         {
-            group.addTemplate(new FileTemplateDescriptor(template, fileTypeManager.getFileTypeByFileName(template).getIcon()));
+            group.addTemplate(new FileTemplateDescriptor(template,
+                    fileTypeManager.getFileTypeByFileName(template).getIcon()));
         }
         return group;
     }

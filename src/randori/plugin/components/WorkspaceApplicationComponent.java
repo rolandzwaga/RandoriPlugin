@@ -20,35 +20,50 @@
 package randori.plugin.components;
 
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.project.Project;
 import org.apache.flex.compiler.internal.projects.FlexProject;
 import org.apache.flex.compiler.internal.workspaces.Workspace;
+import org.apache.flex.compiler.projects.ICompilerProject;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Michael Schmalle
  */
-public class WorkspaceApplicationComponent implements ApplicationComponent
+public class WorkspaceApplicationComponent implements ApplicationComponent,
+        IWorkspaceApplication
 {
     private Workspace workspace;
 
+    private Map<String, FlexProject> map = new HashMap<String, FlexProject>();
 
     public WorkspaceApplicationComponent()
     {
     }
-
 
     public Workspace getWorkspace()
     {
         return workspace;
     }
 
+    @Override
+    public ICompilerProject addProject(Project project)
+    {
+        if (map.containsKey(project.getName()))
+            return null;
+        FlexProject result = new FlexProject(workspace);
+        map.put(project.getName(), result);
+        return result;
+    }
+
     public void initComponent()
     {
-        // TODO: insert component initialization logic here
+        workspace = new Workspace();
     }
 
     public void disposeComponent()
@@ -64,7 +79,6 @@ public class WorkspaceApplicationComponent implements ApplicationComponent
 
     private void startupApplication()
     {
-        workspace = new Workspace();
 
         //FlexProjectConfigurator.configure(project);
 
@@ -75,7 +89,7 @@ public class WorkspaceApplicationComponent implements ApplicationComponent
         List<File> libraries = new ArrayList<File>();
         //project.addSourcePathFile();
         //project.setLibraries();
-//        compilationSuccess = application.build(
-//                (IRandoriBackend) backend, problems);
+        //        compilationSuccess = application.build(
+        //                (IRandoriBackend) backend, problems);
     }
 }

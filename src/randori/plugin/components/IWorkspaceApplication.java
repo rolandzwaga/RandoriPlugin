@@ -17,13 +17,22 @@
  * @author Michael Schmalle <mschmalle@teotigraphix.com>
  */
 
-package randori.plugin.compiler;
+package randori.plugin.components;
+
+import com.intellij.openapi.project.Project;
+import org.apache.flex.compiler.internal.workspaces.Workspace;
+import org.apache.flex.compiler.projects.ICompilerProject;
 
 /**
- * Base abstraction for calling the compiler API.
+ * The single instance of the IWorkspace in the IDE that manages compilation
+ * units for
  * 
  * @author Michael Schmalle
  */
-public class Compiler
+public interface IWorkspaceApplication
 {
+
+    Workspace getWorkspace();
+
+    ICompilerProject addProject(Project project);
 }

@@ -53,7 +53,8 @@ public class RandoriApplicationComponent implements ApplicationComponent
     public void initComponent()
     {
         fileChangeListener = new FileChangeListener();
-        VirtualFileManager.getInstance().addVirtualFileListener(fileChangeListener);
+        VirtualFileManager.getInstance().addVirtualFileListener(
+                fileChangeListener);
 
         compilerArguments = new CompilerArguments();
         buildSourceCommand = new BuildSourceCommand();
@@ -62,7 +63,8 @@ public class RandoriApplicationComponent implements ApplicationComponent
     @Override
     public void disposeComponent()
     {
-        VirtualFileManager.getInstance().removeVirtualFileListener(fileChangeListener);
+        VirtualFileManager.getInstance().removeVirtualFileListener(
+                fileChangeListener);
     }
 
     @NotNull

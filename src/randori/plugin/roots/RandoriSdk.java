@@ -71,7 +71,8 @@ public class RandoriSdk extends SdkType
 
         VirtualFile global = sdkRoot.findFileByRelativePath("bin/builtin.swc");
         VirtualFile randori = sdkRoot.findFileByRelativePath("bin/Randori.swc");
-        VirtualFile guice = sdkRoot.findFileByRelativePath("bin/RandoriGuiceJS.swc");
+        VirtualFile guice = sdkRoot
+                .findFileByRelativePath("bin/RandoriGuiceJS.swc");
 
         addSWC(modificator, global);
         addSWC(modificator, randori);
@@ -87,7 +88,8 @@ public class RandoriSdk extends SdkType
 
     private void addSWC(SdkModificator modificator, VirtualFile swc)
     {
-        final VirtualFile jarRoot = JarFileSystem.getInstance().getJarRootForLocalFile(swc);
+        final VirtualFile jarRoot = JarFileSystem.getInstance()
+                .getJarRootForLocalFile(swc);
         if (jarRoot != null)
         {
             modificator.addRoot(jarRoot, OrderRootType.CLASSES);
@@ -100,7 +102,8 @@ public class RandoriSdk extends SdkType
         if (versionFile.exists())
         {
             File fXmlFile = new File(versionFile.getPath());
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+                    .newInstance();
 
             try
             {
@@ -149,13 +152,15 @@ public class RandoriSdk extends SdkType
     }
 
     @Override
-    public AdditionalDataConfigurable createAdditionalDataConfigurable(SdkModel sdkModel, SdkModificator sdkModificator)
+    public AdditionalDataConfigurable createAdditionalDataConfigurable(
+            SdkModel sdkModel, SdkModificator sdkModificator)
     {
         return null;
     }
 
     @Override
-    public void saveAdditionalData(SdkAdditionalData additionalData, org.jdom.Element additional)
+    public void saveAdditionalData(SdkAdditionalData additionalData,
+            org.jdom.Element additional)
     {
     }
 
@@ -175,7 +180,8 @@ public class RandoriSdk extends SdkType
     public String getVersionString(String sdkHome)
     {
         // need to get the version from the XML file at the root of the SDK
-        VirtualFile sdkRoot = sdkHome != null ? VfsUtil.findRelativeFile(sdkHome, null) : null;
+        VirtualFile sdkRoot = sdkHome != null ? VfsUtil.findRelativeFile(
+                sdkHome, null) : null;
         return getVersion(sdkRoot);
     }
 
@@ -189,7 +195,8 @@ public class RandoriSdk extends SdkType
     public boolean isRootTypeApplicable(OrderRootType type)
     {
         // called after an sdk has been choosen and when a project is starting up OR the IDE is starting with ProjectStructure
-        return type == OrderRootType.CLASSES || type == OrderRootType.SOURCES || type == JavadocOrderRootType.getInstance();
+        return type == OrderRootType.CLASSES || type == OrderRootType.SOURCES
+                || type == JavadocOrderRootType.getInstance();
     }
 
 }

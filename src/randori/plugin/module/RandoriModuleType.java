@@ -35,9 +35,11 @@ import javax.swing.*;
 public class RandoriModuleType extends ModuleType<RandoriModuleBuilder>
 {
 
-    public static final Icon RANDORI_ICON_SMALL = IconLoader.getIcon("/randori/plugin/module/randori.png");
+    public static final Icon RANDORI_ICON_SMALL = IconLoader
+            .getIcon("/randori/plugin/module/randori.png");
 
-    public static final Icon RANDORI_ICON_LARGE = IconLoader.getIcon("/randori/plugin/module/randorix2.png");
+    public static final Icon RANDORI_ICON_LARGE = IconLoader
+            .getIcon("/randori/plugin/module/randorix2.png");
 
     @NonNls
     private static final String MODULE_ID = "RANDORI_MODULE";
@@ -49,7 +51,8 @@ public class RandoriModuleType extends ModuleType<RandoriModuleBuilder>
 
     public static RandoriModuleType getInstance()
     {
-        return (RandoriModuleType) ModuleTypeManager.getInstance().findByID(MODULE_ID);
+        return (RandoriModuleType) ModuleTypeManager.getInstance().findByID(
+                MODULE_ID);
     }
 
     public static boolean isOfType(Module module)

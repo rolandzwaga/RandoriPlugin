@@ -32,7 +32,8 @@ public class NotificationUtils
 
     public static void sendRandoriInformation(String title, String message)
     {
-        final Notification notification = new Notification(RANDORI, title, message, NotificationType.INFORMATION);
+        final Notification notification = new Notification(RANDORI, title,
+                message, NotificationType.INFORMATION);
         notification.hideBalloon();
         Notifications.Bus.notify(notification);
     }
