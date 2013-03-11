@@ -8,6 +8,12 @@
 
     <application-components>
         <component>
+            <implementation-class>randori.plugin.runner.RandoriServerComponent</implementation-class>
+        </component>
+        <component>
+            <implementation-class>randori.plugin.runner.RandoriRunnerConfigurationType</implementation-class>
+        </component>
+        <component>
             <implementation-class>randori.plugin.components.RandoriApplicationComponent</implementation-class>
         </component>
         <component>
@@ -34,7 +40,8 @@
     </module-components>
 
     <actions>
-        <action id="RandoriPlugin.BuildClean" class="randori.plugin.action.RunBuildCleanAction" text="Build and Clean Randori..."
+        <action id="RandoriPlugin.BuildClean" class="randori.plugin.action.RunBuildCleanAction"
+                text="Build and Clean Randori..."
                 description="Build and Cleans a Randori project">
             <add-to-group group-id="BuildMenu" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt C"/>
@@ -62,6 +69,8 @@
                     classpathProvider="true"/>
 
         <moduleConfigurationEditorProvider implementation="randori.plugin.module.RandoriModuleEditorsProvider"/>
+
+        <configurationType implementation="randori.plugin.runner.RandoriRunnerConfigurationType"/>
 
         <toolWindow id="Problems" anchor="bottom" icon="/icons/randori13x13.png"
                     factoryClass="randori.plugin.ui.ProblemsToolWindowFactory"/>

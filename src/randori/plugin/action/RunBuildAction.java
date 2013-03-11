@@ -19,6 +19,7 @@
 
 package randori.plugin.action;
 
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -39,6 +40,7 @@ public class RunBuildAction extends AnAction
         RandoriProjectComponent component = ProjectUtils
                 .getProjectComponent(project);
         component.build(false);
+        BrowserUtil.launchBrowser("http://localhost:8080/");
     }
 
 }
