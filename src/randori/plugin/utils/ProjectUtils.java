@@ -19,9 +19,17 @@
 
 package randori.plugin.utils;
 
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
+import randori.plugin.components.RandoriApplicationComponent;
+import randori.plugin.components.RandoriProjectComponent;
+
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
@@ -32,13 +40,6 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.libraries.LibraryUtil;
 import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.Nullable;
-import randori.plugin.components.RandoriApplicationComponent;
-import randori.plugin.components.RandoriProjectComponent;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A set of utilities for working with Projects and Modules.
@@ -66,7 +67,8 @@ public class ProjectUtils
     {
         AsyncResult<DataContext> dataContext = DataManager.getInstance()
                 .getDataContextFromFocus();
-        Project project = PlatformDataKeys.PROJECT.getData(dataContext.getResult());
+        Project project = PlatformDataKeys.PROJECT.getData(dataContext
+                .getResult());
         return project;
     }
 

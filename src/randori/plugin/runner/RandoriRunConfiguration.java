@@ -25,8 +25,6 @@ import java.util.Collection;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
-import randori.plugin.components.RandoriProjectComponent;
-
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
@@ -38,7 +36,6 @@ import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -126,22 +123,7 @@ public class RandoriRunConfiguration extends
         //                executor), env);
         myEnvironment = environment;
 
-        RunProfileState state = new MyRunProfileState();
-        //        final JavaCommandLineState state = new JavaCommandLineState(environment) {
-        //            @Override
-        //            protected JavaParameters createJavaParameters() throws ExecutionException
-        //            {
-        //                return null;
-        //            }
-        //            @Override
-        //            public ExecutionResult execute(Executor executor,
-        //                    ProgramRunner runner) throws ExecutionException
-        //            {
-        //                // TODO Auto-generated method stub
-        //                return super.execute(executor, runner);
-        //            }
-        //        };
-        //        state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject()));
+        RunProfileState state = new ApplicationServerRunState();
         return state;
     }
 
@@ -162,25 +144,21 @@ public class RandoriRunConfiguration extends
         String name = getName();
         int pos = name.lastIndexOf('.');
         if (pos == -1)
-        {
             return name;
-        }
+
         return name.substring(pos + 1);
     }
 
     //--------------------------------------------------------------------------
 
-    public class MyRunProfileState implements RunProfileState
+    public class ApplicationServerRunState implements RunProfileState
     {
         @Override
-        public ExecutionResult execute(Executor arg0, ProgramRunner arg1)
+        public ExecutionResult execute(Executor executor, ProgramRunner runner)
                 throws ExecutionException
         {
-            String url = getURL();
-            // temp, will hook up properly, can create a config that says
-            // something like preview in browser checkbox
-            BrowserUtil.launchBrowser(url);
-
+            RandoriServerComponent component = getProject().getComponent(RandoriServerComponent.class);
+            component.openURL(indexRoot);
             //            ExecutionResult result = new ExecutionResult() {
             //
             //                @Override
@@ -220,12 +198,5 @@ public class RandoriRunConfiguration extends
         }
     }
 
-    public String getURL()
-    {
-        RandoriProjectComponent component = getProject().getComponent(
-                RandoriProjectComponent.class);
-        int port = component.getState().getPort();
-        String url = "http://localhost:" + port + "/" + indexRoot;
-        return url;
-    }
+
 }
