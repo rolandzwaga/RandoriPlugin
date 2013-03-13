@@ -46,27 +46,32 @@ public class ASProjectComponent implements ProjectComponent
         return asProject;
     }
 
+    @Override
     public void initComponent()
     {
         asProject = (FlexProject) workspace.addProject(project);
     }
 
+    @Override
     public void disposeComponent()
     {
         workspace.getWorkspace().deleteProject(asProject);
     }
 
+    @Override
     @NotNull
     public String getComponentName()
     {
         return "ASProjectComponent";
     }
 
+    @Override
     public void projectOpened()
     {
         // called when project is opened
     }
 
+    @Override
     public void projectClosed()
     {
         // called when project is being closed

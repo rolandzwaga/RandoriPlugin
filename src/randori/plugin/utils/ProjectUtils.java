@@ -66,7 +66,7 @@ public class ProjectUtils
     {
         AsyncResult<DataContext> dataContext = DataManager.getInstance()
                 .getDataContextFromFocus();
-        Project project = DataKeys.PROJECT.getData(dataContext.getResult());
+        Project project = PlatformDataKeys.PROJECT.getData(dataContext.getResult());
         return project;
     }
 
@@ -74,7 +74,7 @@ public class ProjectUtils
     {
         DataContext dataContext = DataManager.getInstance().getDataContext(
                 component);
-        Project project = DataKeys.PROJECT.getData(dataContext);
+        Project project = PlatformDataKeys.PROJECT.getData(dataContext);
         return project;
     }
 

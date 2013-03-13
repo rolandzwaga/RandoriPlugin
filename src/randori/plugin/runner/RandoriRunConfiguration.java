@@ -1,3 +1,22 @@
+/***
+ * Copyright 2013 Teoti Graphix, LLC.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *
+ * @author Michael Schmalle <mschmalle@teotigraphix.com>
+ */
+
 package randori.plugin.runner;
 
 import java.util.Arrays;
@@ -28,13 +47,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.util.xmlb.XmlSerializer;
-import com.intellij.util.xmlb.annotations.Transient;
 
+/**
+ * @author Michael Schmalle
+ */
 @SuppressWarnings({ "rawtypes" })
 public class RandoriRunConfiguration extends
         ModuleBasedConfiguration<RandoriApplicationModuleBasedConfiguration>
 {
-
     public String indexRoot;
 
     private ExecutionEnvironment myEnvironment;
@@ -61,13 +81,6 @@ public class RandoriRunConfiguration extends
     }
 
     @Override
-    @Transient
-    public void setModule(Module module)
-    {
-        super.setModule(module);
-    }
-
-    @Override
     public void checkConfiguration() throws RuntimeConfigurationException
     {
         super.checkConfiguration();
@@ -79,11 +92,13 @@ public class RandoriRunConfiguration extends
             throw new RuntimeConfigurationException("A module is required");
     }
 
+    @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
     {
         return new RandoriRunConfigurationEditor(getProject());
     }
 
+    @Override
     public void readExternal(final Element element) throws InvalidDataException
     {
         PathMacroManager.getInstance(getProject()).expandPaths(element);
@@ -91,6 +106,7 @@ public class RandoriRunConfiguration extends
         readModule(element);
     }
 
+    @Override
     public void writeExternal(final Element element)
             throws WriteExternalException
     {
@@ -101,6 +117,7 @@ public class RandoriRunConfiguration extends
                 element);
     }
 
+    @Override
     public RunProfileState getState(@NotNull Executor executor,
             @NotNull ExecutionEnvironment environment)
             throws ExecutionException

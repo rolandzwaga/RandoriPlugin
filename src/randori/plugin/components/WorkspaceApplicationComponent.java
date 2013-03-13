@@ -44,6 +44,7 @@ public class WorkspaceApplicationComponent implements ApplicationComponent,
     {
     }
 
+    @Override
     public Workspace getWorkspace()
     {
         return workspace;
@@ -59,16 +60,19 @@ public class WorkspaceApplicationComponent implements ApplicationComponent,
         return result;
     }
 
+    @Override
     public void initComponent()
     {
         workspace = new Workspace();
     }
 
+    @Override
     public void disposeComponent()
     {
         // TODO: insert component disposal logic here
     }
 
+    @Override
     @NotNull
     public String getComponentName()
     {

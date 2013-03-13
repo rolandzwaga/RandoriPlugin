@@ -91,6 +91,7 @@ public class RandoriServerComponent implements ProjectComponent
 
         execService = Executors.newFixedThreadPool(1);
         execService.submit(new Runnable() {
+            @Override
             public void run()
             {
                 try

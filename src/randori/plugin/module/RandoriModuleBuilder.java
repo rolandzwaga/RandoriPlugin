@@ -94,6 +94,7 @@ public class RandoriModuleBuilder extends JavaModuleBuilder
         //        randoriJS.copy(this, newRandoriGuiceJS, "RandoriGuiceJS.js");
     }
 
+    @Override
     public List<Pair<String, String>> getSourcePaths()
     {
         if (mySourcePaths == null)
@@ -108,12 +109,14 @@ public class RandoriModuleBuilder extends JavaModuleBuilder
         return mySourcePaths;
     }
 
+    @Override
     public void setSourcePaths(List<Pair<String, String>> sourcePaths)
     {
         mySourcePaths = sourcePaths != null ? new ArrayList<Pair<String, String>>(
                 sourcePaths) : null;
     }
 
+    @Override
     public void addSourcePath(Pair<String, String> sourcePathInfo)
     {
         if (mySourcePaths == null)
