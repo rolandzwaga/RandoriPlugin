@@ -25,6 +25,8 @@ import java.util.Collection;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
+import randori.plugin.components.RandoriProjectComponent;
+
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
@@ -157,8 +159,10 @@ public class RandoriRunConfiguration extends
         public ExecutionResult execute(Executor executor, ProgramRunner runner)
                 throws ExecutionException
         {
-            RandoriServerComponent component = getProject().getComponent(RandoriServerComponent.class);
-            component.openURL(indexRoot);
+            RandoriProjectComponent component = getProject().getComponent(
+                    RandoriProjectComponent.class);
+            component.run(indexRoot);
+
             //            ExecutionResult result = new ExecutionResult() {
             //
             //                @Override
@@ -197,6 +201,5 @@ public class RandoriRunConfiguration extends
             return myEnvironment.getRunnerSettings();
         }
     }
-
 
 }
