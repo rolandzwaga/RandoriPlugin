@@ -8,9 +8,6 @@
 
     <application-components>
         <component>
-            <implementation-class>randori.plugin.runner.RandoriServerComponent</implementation-class>
-        </component>
-        <component>
             <implementation-class>randori.plugin.runner.RandoriRunnerConfigurationType</implementation-class>
         </component>
         <component>
@@ -22,11 +19,11 @@
     </application-components>
 
     <project-components>
-        <!--<component>-->
-        <!--<implementation-class>randori.plugin.builder.RandoriBuilderComponent</implementation-class>-->
-        <!--</component>-->
         <component>
             <implementation-class>randori.plugin.components.RandoriProjectComponent</implementation-class>
+        </component>
+        <component>
+            <implementation-class>randori.plugin.runner.RandoriServerComponent</implementation-class>
         </component>
         <component>
             <implementation-class>randori.plugin.components.ASProjectComponent</implementation-class>

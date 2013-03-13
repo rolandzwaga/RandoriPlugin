@@ -1,11 +1,16 @@
 package randori.plugin.forms;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import org.jetbrains.annotations.NotNull;
+
+import randori.plugin.components.RandoriProjectModel;
+
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
-import org.jetbrains.annotations.NotNull;
-import randori.plugin.components.RandoriProjectComponent;
-
-import javax.swing.*;
 
 /**
  * @author Michael Schmalle
@@ -22,15 +27,23 @@ public class RandoriProjectConfigurationForm extends
 
     private JCheckBox exportAsFiles;
 
-    public void getData(RandoriProjectComponent data)
+    private JTextField webRoot;
+
+    private JTextField port;
+
+    public void getData(RandoriProjectModel data)
     {
+        data.setWebRoot(webRoot.getText());
+        data.setPort(Integer.valueOf(port.getText()));
         data.setBasePath(basePath.getText());
         data.setLibraryPath(libraryPath.getText());
         data.setClassesAsFile(exportAsFiles.isSelected());
     }
 
-    public void setData(RandoriProjectComponent data)
+    public void setData(RandoriProjectModel data)
     {
+        webRoot.setText(data.getWebRoot());
+        port.setText(Integer.toString(data.getPort()));
         basePath.setText(data.getBasePath());
         libraryPath.setText(data.getLibraryPath());
         exportAsFiles.setSelected(data.isClassesAsFile());
@@ -63,23 +76,31 @@ public class RandoriProjectConfigurationForm extends
     {
     }
 
-    public boolean isModified(RandoriProjectComponent data)
+    public boolean isModified(RandoriProjectModel data)
     {
         if (isOpposite(exportAsFiles, data.isClassesAsFile()))
             return true;
-        return isModified(basePath, data.getBasePath())
+        return isModified(webRoot, data.getWebRoot())
+                || isModified(port, data.getPort())
+                || isModified(basePath, data.getBasePath())
                 || isModified(libraryPath, data.getLibraryPath());
 
     }
 
-    private boolean isOpposite(JCheckBox exportAsFiles, boolean selected)
+    private boolean isModified(JTextField component, int value)
     {
-        return exportAsFiles.isSelected() != selected;
+        return component.getText() != null ? !component.getText().equals(value)
+                : false;
     }
 
-    private boolean isModified(JTextField field, String value)
+    private boolean isOpposite(JCheckBox component, boolean selected)
     {
-        return field.getText() != null ? !field.getText().equals(value)
+        return component.isSelected() != selected;
+    }
+
+    private boolean isModified(JTextField component, String value)
+    {
+        return component.getText() != null ? !component.getText().equals(value)
                 : value != null;
     }
 }

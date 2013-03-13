@@ -19,12 +19,9 @@
 
 package randori.plugin.runner;
 
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;
@@ -32,38 +29,62 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.nio.NetworkTrafficSelectChannelConnector;
 
-import javax.swing.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import randori.plugin.components.RandoriProjectComponent;
 
-@State(name = "MyRunnerSettings", storages = { @Storage(id = "jettyrunner", file = "$APP_CONFIG$/jettyrunner.xml") })
+import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.project.Project;
+import randori.plugin.components.RandoriProjectModel;
+
 /**
  * @author Michael Schmalle
  */
-public class RandoriServerComponent implements ApplicationComponent,
-        Configurable, PersistentStateComponent<RandoriServerComponent>
+public class RandoriServerComponent implements ProjectComponent
 {
 
+    private static final String DEFAULT_INDEX_HTML = "index.html";
+
     private Server server;
+
     private ExecutorService execService;
+
+    private Project project;
+
+    private RandoriProjectComponent component;
+
+    public RandoriServerComponent(Project project,
+            RandoriProjectComponent component)
+    {
+        this.project = project;
+        this.component = component;
+    }
 
     @Override
     public void initComponent()
     {
+
+    }
+
+    public void startServer(RandoriProjectModel model)
+    {
         server = new Server();
         NetworkTrafficSelectChannelConnector connector = new NetworkTrafficSelectChannelConnector(
                 server);
-        connector.setPort(8080);
+        connector.setPort(model.getPort());
         server.addConnector(connector);
 
-        ResourceHandler resource_handler = new ResourceHandler();
-        resource_handler.setDirectoriesListed(true);
-        resource_handler.setWelcomeFiles(new String[] { "index.html" });
+        ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.setDirectoriesListed(true);
+        resourceHandler.setWelcomeFiles(new String[] { DEFAULT_INDEX_HTML });
+        // TODO dosn't look like the RandoriProjectComponent has been restored yet, so this is the worn place
 
-        resource_handler.setResourceBase("C:\\webroot");
+        String root = model.getWebRoot();
+        if (root == null || root.equals(""))
+            root = project.getBasePath();
+
+        resourceHandler.setResourceBase(root);
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { resource_handler,
+        handlers.setHandlers(new Handler[] { resourceHandler,
                 new DefaultHandler() });
 
         server.setHandler(handlers);
@@ -83,7 +104,6 @@ public class RandoriServerComponent implements ApplicationComponent,
                 }
             }
         });
-
     }
 
     @Override
@@ -101,97 +121,20 @@ public class RandoriServerComponent implements ApplicationComponent,
     }
 
     @Override
+    public void projectOpened()
+    {
+        startServer(component.getState());
+    }
+
+    @Override
+    public void projectClosed()
+    {
+    }
+
+    @Override
     public String getComponentName()
     {
         return "RandoriServerComponent";
     }
 
-    @Override
-    public JComponent createComponent()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public boolean isModified()
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void apply() throws ConfigurationException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void reset()
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void disposeUIResources()
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public RandoriServerComponent getState()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void loadState(RandoriServerComponent state)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public String getDisplayName()
-    {
-        return "Randori Runner";
-    }
-
-    @Override
-    public String getHelpTopic()
-    {
-        return null;
-    }
-
-    //--------------------------------------------------------------------------
-    //
-    //--------------------------------------------------------------------------
-
-    private String webRoot = "index.html";
-
-    private int port = 8080;
-
-    public String getWebRoot()
-    {
-        return webRoot;
-    }
-
-    public void setWebRoot(String value)
-    {
-        webRoot = value;
-    }
-
-    public int getPort()
-    {
-        return port;
-    }
-
-    public void setPort(int value)
-    {
-        port = value;
-    }
 }
