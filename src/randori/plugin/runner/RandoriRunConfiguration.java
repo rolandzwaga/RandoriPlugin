@@ -1,72 +1,114 @@
 package randori.plugin.runner;
 
-import org.jetbrains.annotations.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+
+import randori.plugin.components.RandoriProjectComponent;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.ConfigurationFactory;
-import com.intellij.execution.configurations.ConfigurationInfoProvider;
 import com.intellij.execution.configurations.ConfigurationPerRunnerSettings;
-import com.intellij.execution.configurations.ModuleRunConfiguration;
+import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.ide.BrowserUtil;
+import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.JDOMExternalizable;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.util.xmlb.XmlSerializer;
+import com.intellij.util.xmlb.annotations.Transient;
 
-@SuppressWarnings({ "deprecation", "rawtypes" })
-public class RandoriRunConfiguration extends RunConfigurationBase implements
-        ModuleRunConfiguration
+@SuppressWarnings({ "rawtypes" })
+public class RandoriRunConfiguration extends
+        ModuleBasedConfiguration<RandoriApplicationModuleBasedConfiguration>
 {
+
+    public String indexRoot;
 
     private ExecutionEnvironment myEnvironment;
 
-    private Module myModule;
-
-    private String myModuleName;
-
-    public RandoriRunConfiguration(Project project,
-            ConfigurationFactory factory, String name)
+    public RandoriRunConfiguration(String name, Project project,
+            RandoriRunnerConfigurationType configurationType)
     {
-        super(project, factory, name);
+        super(name, new RandoriApplicationModuleBasedConfiguration(project),
+                configurationType.getConfigurationFactories()[0]);
     }
 
     @Override
+    public Collection<Module> getValidModules()
+    {
+        Module[] modules = ModuleManager.getInstance(getProject()).getModules();
+        return Arrays.asList(modules);
+    }
+
+    @Override
+    protected ModuleBasedConfiguration createInstance()
+    {
+        return new RandoriRunConfiguration(getName(), getProject(),
+                RandoriRunnerConfigurationType.getInstance());
+    }
+
+    @Override
+    @Transient
+    public void setModule(Module module)
+    {
+        super.setModule(module);
+    }
+
+    @Override
+    public void checkConfiguration() throws RuntimeConfigurationException
+    {
+        super.checkConfiguration();
+
+        if (indexRoot == null)
+            throw new RuntimeConfigurationException("An index is required");
+
+        if (getModule() == null)
+            throw new RuntimeConfigurationException("A module is required");
+    }
+
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
     {
-        // called when clicking on a default run config for Randori App
-        // the default form just contains the "Make" options
-        return new RandoriRunConfigurationEditor(this);
+        return new RandoriRunConfigurationEditor(getProject());
     }
 
-    @Override
-    public JDOMExternalizable createRunnerSettings(
-            ConfigurationInfoProvider arg0)
+    public void readExternal(final Element element) throws InvalidDataException
     {
-        return null;
+        PathMacroManager.getInstance(getProject()).expandPaths(element);
+        XmlSerializer.deserializeInto(this, element);
+        readModule(element);
     }
 
-    @Override
-    public SettingsEditor<JDOMExternalizable> getRunnerSettingsEditor(
-            ProgramRunner arg0)
+    public void writeExternal(final Element element)
+            throws WriteExternalException
     {
-        return null;
+        super.writeExternal(element);
+        XmlSerializer.serializeInto(this, element);
+        writeModule(element);
+        PathMacroManager.getInstance(getProject()).collapsePathsRecursively(
+                element);
     }
 
-    @Override
-    public RunProfileState getState(Executor arg0,
-            ExecutionEnvironment environment) throws ExecutionException
+    public RunProfileState getState(@NotNull Executor executor,
+            @NotNull ExecutionEnvironment environment)
+            throws ExecutionException
     {
+        //        return new RandoriCommandLineState(new RandoriConsoleProperties(this,
+        //                executor), env);
         myEnvironment = environment;
+
         RunProfileState state = new MyRunProfileState();
         //        final JavaCommandLineState state = new JavaCommandLineState(environment) {
         //            @Override
@@ -86,40 +128,30 @@ public class RandoriRunConfiguration extends RunConfigurationBase implements
         return state;
     }
 
-    @Override
-    public void checkConfiguration() throws RuntimeConfigurationException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public Module[] getModules()
-    {
-        final Module module = getModule();
-        return module != null ? new Module[] { module } : Module.EMPTY_ARRAY;
-    }
-
-    @Nullable
     public Module getModule()
     {
-        if (myModule == null && myModuleName != null)
-        {
-            myModule = ModuleManager.getInstance(getProject())
-                    .findModuleByName(myModuleName);
-        }
-        if (myModule != null && myModule.isDisposed())
-        {
-            myModule = null;
-        }
-
-        return myModule;
+        return getConfigurationModule().getModule();
     }
 
-    public void setModule(Module module)
+    @Override
+    public boolean isGeneratedName()
     {
-        myModule = module;
+        return true;
     }
+
+    @Override
+    public String suggestedName()
+    {
+        String name = getName();
+        int pos = name.lastIndexOf('.');
+        if (pos == -1)
+        {
+            return name;
+        }
+        return name.substring(pos + 1);
+    }
+
+    //--------------------------------------------------------------------------
 
     public class MyRunProfileState implements RunProfileState
     {
@@ -127,9 +159,10 @@ public class RandoriRunConfiguration extends RunConfigurationBase implements
         public ExecutionResult execute(Executor arg0, ProgramRunner arg1)
                 throws ExecutionException
         {
+            String url = getURL();
             // temp, will hook up properly, can create a config that says
             // something like preview in browser checkbox
-            BrowserUtil.launchBrowser("http://localhost:8080/");
+            BrowserUtil.launchBrowser(url);
 
             //            ExecutionResult result = new ExecutionResult() {
             //
@@ -168,7 +201,14 @@ public class RandoriRunConfiguration extends RunConfigurationBase implements
         {
             return myEnvironment.getRunnerSettings();
         }
-
     }
 
+    public String getURL()
+    {
+        RandoriProjectComponent component = getProject().getComponent(
+                RandoriProjectComponent.class);
+        int port = component.getState().getPort();
+        String url = "http://localhost:" + port + "/" + indexRoot;
+        return url;
+    }
 }

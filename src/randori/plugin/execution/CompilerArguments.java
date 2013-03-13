@@ -19,11 +19,12 @@
 
 package randori.plugin.execution;
 
-import com.intellij.openapi.project.Project;
-import randori.plugin.components.RandoriProjectComponent;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import randori.plugin.components.RandoriProjectModel;
+
+import com.intellij.openapi.project.Project;
 
 /**
  * @author Michael Schmalle
@@ -138,11 +139,11 @@ public class CompilerArguments
         return result.toArray(new String[] {});
     }
 
-    public void configure(Project project, RandoriProjectComponent component)
+    public void configure(Project project, RandoriProjectModel model)
     {
-        setJsBasePath(component.getBasePath());
-        setJsLibraryPath(component.getLibraryPath());
-        setJsOutputAsFiles(component.isClassesAsFile());
+        setJsBasePath(model.getBasePath());
+        setJsLibraryPath(model.getLibraryPath());
+        setJsOutputAsFiles(model.isClassesAsFile());
         setOutput(project.getBasePath());
     }
 

@@ -161,7 +161,7 @@ public class BuildSourceCommand
             {
                 // wipe the generated directory
                 VirtualFile virtualFile = file.findFileByRelativePath(component
-                        .getBasePath());
+                        .getModel().getBasePath());
                 try
                 {
                     if (virtualFile != null && virtualFile.exists())
@@ -195,7 +195,7 @@ public class BuildSourceCommand
                 && SdkUtils.libraryExists(project, "RandoriGuiceJS"))
         {
             String libPath = project
-                    .getComponent(RandoriProjectComponent.class)
+                    .getComponent(RandoriProjectComponent.class).getState()
                     .getLibraryPath();
 
             VirtualFile libraryDir = baseDir.findFileByRelativePath(libPath);

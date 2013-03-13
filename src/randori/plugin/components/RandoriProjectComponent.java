@@ -19,7 +19,6 @@
 
 package randori.plugin.components;
 
-import javax.swing.Icon;
 import javax.swing.JComponent;
 
 import org.apache.flex.compiler.problems.ICompilerProblem;
@@ -56,7 +55,7 @@ import com.intellij.openapi.vfs.VirtualFile;
  * @author Michael Schmalle
  */
 public class RandoriProjectComponent implements ProjectComponent, Configurable,
-        PersistentStateComponent<RandoriProjectComponent>
+        PersistentStateComponent<RandoriProjectModel>
 {
     public static final String COMPONENT_NAME = "RandoriProject";
 
@@ -64,19 +63,22 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable,
 
     private RandoriProjectConfigurationForm form;
 
-    private String basePath = "generated";
+    private RandoriProjectModel model;
 
-    private String libraryPath = "generated/lib";
-
-    private boolean classesAsFile = true;
-
-    public RandoriProjectComponent()
+    public RandoriProjectModel getModel()
     {
+        return model;
+    }
+
+    public Project getProject()
+    {
+        return project;
     }
 
     public RandoriProjectComponent(Project project)
     {
         this.project = project;
+        this.model = new RandoriProjectModel();
     }
 
     public void reparse(VirtualFile file)
@@ -175,12 +177,6 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable,
         return "Randori";
     }
 
-    //@Override
-    public Icon getIcon()
-    {
-        return null;
-    }
-
     @Override
     public String getHelpTopic()
     {
@@ -188,17 +184,17 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable,
     }
 
     @Override
-    public RandoriProjectComponent getState()
+    public RandoriProjectModel getState()
     {
-        return this;
+        return model;
     }
 
     @Override
-    public void loadState(RandoriProjectComponent state)
+    public void loadState(RandoriProjectModel state)
     {
-        setBasePath(state.getBasePath());
-        setLibraryPath(state.getLibraryPath());
-        setClassesAsFile(state.isClassesAsFile());
+        //setBasePath(state.getBasePath());
+        //setLibraryPath(state.getLibraryPath());
+        //setClassesAsFile(state.isClassesAsFile());
     }
 
     @Override
@@ -214,7 +210,7 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable,
     @Override
     public boolean isModified()
     {
-        return form.isModified(this);
+        return form.isModified(getState());
     }
 
     @Override
@@ -222,7 +218,7 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable,
     {
         if (form != null)
         {
-            form.getData(this);
+            form.getData(getState());
         }
     }
 
@@ -234,7 +230,7 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable,
     {
         if (form != null)
         {
-            form.setData(this);
+            form.setData(getState());
         }
     }
 
@@ -248,7 +244,7 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable,
     {
         arguments.clear();
 
-        arguments.configure(project, this);
+        arguments.configure(project, getModel());
 
         if (ProjectUtils.isSDKInstalled(project))
         {
@@ -279,36 +275,6 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable,
                 arguments.addSourcepath(virtualFile.getPath());
             }
         }
-    }
-
-    public String getBasePath()
-    {
-        return basePath;
-    }
-
-    public void setBasePath(String basePath)
-    {
-        this.basePath = basePath;
-    }
-
-    public String getLibraryPath()
-    {
-        return libraryPath;
-    }
-
-    public void setLibraryPath(String libraryPath)
-    {
-        this.libraryPath = libraryPath;
-    }
-
-    public boolean isClassesAsFile()
-    {
-        return classesAsFile;
-    }
-
-    public void setClassesAsFile(boolean classesAsFile)
-    {
-        this.classesAsFile = classesAsFile;
     }
 
 }

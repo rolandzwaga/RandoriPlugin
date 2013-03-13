@@ -26,46 +26,27 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.util.containers.ContainerUtil;
 
 /**
  * @author Michael Schmalle
  */
-public class RandoriRunnerConfigurationType implements ConfigurationType,
-        ApplicationComponent
+public class RandoriRunnerConfigurationType implements ConfigurationType
 {
 
-    private ConfigurationFactory myFactory;
+    private RandoriFactory myConfigurationFactory;
 
     public RandoriRunnerConfigurationType()
     {
-        myFactory = new ConfigurationFactory(this) {
-
-            @Override
-            public RunConfiguration createTemplateConfiguration(Project project)
-            {
-                final RandoriRunConfiguration configuration = new RandoriRunConfiguration(
-                        project, this, "");
-                return configuration;
-            }
-
-            @SuppressWarnings("unused")
-            @Override
-            public RunConfiguration createConfiguration(String name,
-                    RunConfiguration template)
-            {
-                final RandoriRunConfiguration pluginRunConfiguration = (RandoriRunConfiguration) template;
-                // check settings ?
-                return super.createConfiguration(name, template);
-            }
-        };
+        myConfigurationFactory = new RandoriFactory(this);
     }
 
     public String getDisplayName()
     {
-        return "Randori Runner";
+        return "Randori Application";
     }
 
     public String getConfigurationTypeDescription()
@@ -75,7 +56,7 @@ public class RandoriRunnerConfigurationType implements ConfigurationType,
 
     public Icon getIcon()
     {
-        return IconLoader.getIcon("icons/randori.png");
+        return IconLoader.getIcon("/icons/randori.png");
     }
 
     @NotNull
@@ -87,22 +68,27 @@ public class RandoriRunnerConfigurationType implements ConfigurationType,
     @Override
     public ConfigurationFactory[] getConfigurationFactories()
     {
-        return new ConfigurationFactory[] { myFactory };
+        return new ConfigurationFactory[] { myConfigurationFactory };
     }
 
-    @Override
-    public void initComponent()
+    public static RandoriRunnerConfigurationType getInstance()
     {
+        return ContainerUtil.findInstance(
+                Extensions.getExtensions(CONFIGURATION_TYPE_EP),
+                RandoriRunnerConfigurationType.class);
     }
 
-    @Override
-    public void disposeComponent()
+    public static class RandoriFactory extends ConfigurationFactory
     {
-    }
+        public RandoriFactory(ConfigurationType type)
+        {
+            super(type);
+        }
 
-    @Override
-    public String getComponentName()
-    {
-        return "RandoriRunnerConfigurationType";
+        public RunConfiguration createTemplateConfiguration(Project project)
+        {
+            return new RandoriRunConfiguration("Randori Application", project,
+                    getInstance());
+        }
     }
 }

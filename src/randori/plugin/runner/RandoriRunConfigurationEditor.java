@@ -19,10 +19,15 @@
 
 package randori.plugin.runner;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
+import com.intellij.openapi.project.Project;
 
 /**
  * @author Michael Schmalle
@@ -32,39 +37,18 @@ public class RandoriRunConfigurationEditor extends
 {
     private JPanel panel;
 
-    private JTextField webRoot;
+    private JTextField indexRoot;
 
-    @SuppressWarnings("unused")
-    private final RandoriRunConfiguration configuration;
+    @SuppressWarnings({ "rawtypes" })
+    private JComboBox modules;
 
-    public RandoriRunConfigurationEditor(RandoriRunConfiguration configuration)
+    private Project project;
+
+    private ConfigurationModuleSelector moduleSelector;
+
+    public RandoriRunConfigurationEditor(Project project)
     {
-        this.configuration = configuration;
-        // add ui listeners
-
-        // TODO what is implements PanelWithAnchor ?
-        // setAnchor(myModuleLabel); ???
-    }
-
-    public void setData(RandoriServerComponent data)
-    {
-        // set ui properties
-    }
-
-    public void getData(RandoriServerComponent data)
-    {
-        data.setWebRoot(webRoot.getText());
-    }
-
-    public JComponent getRootComponent()
-    {
-        return panel;
-    }
-
-    public boolean isModified(RandoriServerComponent data)
-    {
-        // test the ui components based off the data
-        return false;
+        this.project = project;
     }
 
     @Override
@@ -72,26 +56,29 @@ public class RandoriRunConfigurationEditor extends
             throws ConfigurationException
     {
         // apply the ui component values to the configuration
+        configuration.indexRoot = indexRoot.getText();
+        moduleSelector.applyTo(configuration);
+    }
 
+    @Override
+    protected void resetEditorFrom(RandoriRunConfiguration configuration)
+    {
+        // reset ui components with config data
+        indexRoot.setText(configuration.indexRoot);
+        moduleSelector.reset(configuration);
     }
 
     @Override
     protected JComponent createEditor()
     {
-        if (panel == null)
-            panel = new JPanel();
+        moduleSelector = new ConfigurationModuleSelector(project, modules);
         return panel;
     }
 
     @Override
     protected void disposeEditor()
     {
+        panel.setVisible(false);
     }
 
-    @Override
-    protected void resetEditorFrom(RandoriRunConfiguration arg0)
-    {
-        // TODO Auto-generated method stub
-        // reset ui components with config data
-    }
 }
