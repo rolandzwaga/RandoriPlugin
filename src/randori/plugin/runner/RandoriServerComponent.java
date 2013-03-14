@@ -19,6 +19,8 @@
 
 package randori.plugin.runner;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -65,7 +67,19 @@ public class RandoriServerComponent implements ProjectComponent
         server = new Server();
         NetworkTrafficSelectChannelConnector connector = new NetworkTrafficSelectChannelConnector(
                 server);
-        connector.setPort(component.getState().getPort());
+        int portNr = component.getState().getPort();
+        if (portNr < 0) {
+            portNr = findFreePort();
+            if (portNr < 0) {
+                //For now do nothing, but if this fails something
+                //is terribly wrong, we need some kind of global
+                //state that indicates that the entire system is
+                //unstable and that the user cannot proceed further. (Or something)
+                return;
+            }
+            component.getState().setPort(portNr);
+        }
+        connector.setPort(portNr);
         server.addConnector(connector);
 
         ResourceHandler resourceHandler = new ResourceHandler();
@@ -83,6 +97,19 @@ public class RandoriServerComponent implements ProjectComponent
                 new DefaultHandler() });
 
         server.setHandler(handlers);
+    }
+
+    public static int findFreePort() {
+        int port = -1;
+        try {
+            ServerSocket server =
+                    new ServerSocket(0);
+            port = server.getLocalPort();
+            server.close();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return port;
     }
 
     @Override
