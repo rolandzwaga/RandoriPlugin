@@ -52,7 +52,7 @@ public class RandoriProjectModel
     // port
     //----------------------------------
 
-    private int port = 8080;
+    private int port = -1;
 
     public int getPort()
     {

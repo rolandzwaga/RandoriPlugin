@@ -72,6 +72,8 @@
         <toolWindow id="Problems" anchor="bottom" icon="/icons/randori13x13.png"
                     factoryClass="randori.plugin.ui.ProblemsToolWindowFactory"/>
 
+        <dom.fileDescription implementation="randori.plugin.xml.FalconConfigDomFileDescription"></dom.fileDescription>
+
     </extensions>
 
 </idea-plugin>
