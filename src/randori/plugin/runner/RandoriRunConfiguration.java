@@ -129,7 +129,7 @@ public class RandoriRunConfiguration extends
         return state;
     }
 
-    public Module getModule()
+    protected Module getModule()
     {
         return getConfigurationModule().getModule();
     }
