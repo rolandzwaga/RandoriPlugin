@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import randori.plugin.execution.CompilerArguments;
 import randori.plugin.forms.RandoriProjectConfigurationForm;
+import randori.plugin.runner.RandoriServerComponent;
 import randori.plugin.utils.ProjectUtils;
 import randori.plugin.utils.VFileUtils;
 
@@ -79,6 +80,14 @@ public class RandoriProjectComponent implements ProjectComponent, Configurable,
     {
         this.project = project;
         this.model = new RandoriProjectModel();
+    }
+
+    public void run(String indexRoot)
+    {
+        RandoriServerComponent component = getProject().getComponent(
+                RandoriServerComponent.class);
+        component.openURL(indexRoot);
+
     }
 
     public void reparse(VirtualFile file)

@@ -44,21 +44,25 @@ public class RandoriRunnerConfigurationType implements ConfigurationType
         myConfigurationFactory = new RandoriFactory(this);
     }
 
+    @Override
     public String getDisplayName()
     {
         return "Randori Application";
     }
 
+    @Override
     public String getConfigurationTypeDescription()
     {
         return "Runs a randori application using the Jetty server";
     }
 
+    @Override
     public Icon getIcon()
     {
         return IconLoader.getIcon("/icons/randori.png");
     }
 
+    @Override
     @NotNull
     public String getId()
     {
@@ -85,6 +89,7 @@ public class RandoriRunnerConfigurationType implements ConfigurationType
             super(type);
         }
 
+        @Override
         public RunConfiguration createTemplateConfiguration(Project project)
         {
             return new RandoriRunConfiguration("Randori Application", project,

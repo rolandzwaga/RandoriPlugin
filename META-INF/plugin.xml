@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <name>Randori Compiler</name>
     <description>Randori framework AS3 to JS cross compiler and builder.</description>
-    <version>0.1.5</version>
+    <version>0.1.6</version>
     <vendor>Teoti Graphix, LLC</vendor>
 
     <idea-version since-build="123.169"/>

@@ -31,6 +31,7 @@ import org.eclipse.jetty.server.nio.NetworkTrafficSelectChannelConnector;
 
 import randori.plugin.components.RandoriProjectComponent;
 
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import randori.plugin.components.RandoriProjectModel;
@@ -61,23 +62,17 @@ public class RandoriServerComponent implements ProjectComponent
     @Override
     public void initComponent()
     {
-
-    }
-
-    public void startServer(RandoriProjectModel model)
-    {
         server = new Server();
         NetworkTrafficSelectChannelConnector connector = new NetworkTrafficSelectChannelConnector(
                 server);
-        connector.setPort(model.getPort());
+        connector.setPort(component.getState().getPort());
         server.addConnector(connector);
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);
         resourceHandler.setWelcomeFiles(new String[] { DEFAULT_INDEX_HTML });
-        // TODO dosn't look like the RandoriProjectComponent has been restored yet, so this is the worn place
 
-        String root = model.getWebRoot();
+        String root = component.getState().getWebRoot();
         if (root == null || root.equals(""))
             root = project.getBasePath();
 
@@ -88,9 +83,20 @@ public class RandoriServerComponent implements ProjectComponent
                 new DefaultHandler() });
 
         server.setHandler(handlers);
+    }
 
+    @Override
+    public void disposeComponent()
+    {
+        server = null;
+        execService = null;
+    }
+
+    void startServer(RandoriProjectModel model)
+    {
         execService = Executors.newFixedThreadPool(1);
         execService.submit(new Runnable() {
+            @Override
             public void run()
             {
                 try
@@ -107,7 +113,18 @@ public class RandoriServerComponent implements ProjectComponent
     }
 
     @Override
-    public void disposeComponent()
+    public void projectOpened()
+    {
+        startServer(component.getState());
+    }
+
+    @Override
+    public void projectClosed()
+    {
+        stopServer();
+    }
+
+    void stopServer()
     {
         try
         {
@@ -121,20 +138,24 @@ public class RandoriServerComponent implements ProjectComponent
     }
 
     @Override
-    public void projectOpened()
-    {
-        startServer(component.getState());
-    }
-
-    @Override
-    public void projectClosed()
-    {
-    }
-
-    @Override
     public String getComponentName()
     {
         return "RandoriServerComponent";
     }
 
+    public void openURL(String reletiveURL)
+    {
+        // still new to this, figuring out if this is the right way to do this.
+        String url = getURL(reletiveURL);
+        // temp, will hook up properly, can create a config that says
+        // something like preview in browser checkbox
+        BrowserUtil.launchBrowser(url);
+    }
+
+    public String getURL(String index)
+    {
+        int port = component.getState().getPort();
+        String url = "http://localhost:" + port + "/" + index;
+        return url;
+    }
 }

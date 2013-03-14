@@ -115,6 +115,7 @@ public class ProblemsToolWindow
         table.setRowSelectionAllowed(true);
 
         table.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e)
             {
                 if (e.getClickCount() == 2)
@@ -182,6 +183,7 @@ public class ProblemsToolWindow
             super();
         }
 
+        @Override
         public void setValue(Object value)
         {
             if (value == null)
